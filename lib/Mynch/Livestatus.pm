@@ -1,11 +1,10 @@
 package Mynch::Livestatus;
 use Mojo::Base 'Mojolicious::Controller';
-
 use Monitoring::Livestatus;
+use strict;
 
 sub content {
     my $self = shift;
-
 
     my @columns = (
         'host_name',              'host_groups',
@@ -25,8 +24,29 @@ sub content {
     return $results_ref;
 }
 
+sub hostgroups {
+    my $self = shift;
+
+    my @columns = qw{name members};
+
+    my $query;
+    $query .= "GET hostgroups\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+
+    if ( $self->param('hostgroup') ) {
+        $query .= $self->_filter(
+            { param => 'hostgroup', operator => '=', column => 'name' } );
+    }
+
+    $self->app->log->debug( "Query: " . $query );
+
+    my $connection = $self->_connect;
+    my $results_ref = $self->_fetch( $connection, $query );
+    $self->render( json => $results_ref );
+}
+
 sub servicesbyhostgroup {
-    my $self      = shift;
+    my $self = shift;
 
     my $hostgroup = $self->param('hostgroup');
 
@@ -47,28 +67,36 @@ sub servicesbyhostgroup {
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
 
     if ($hostgroup) {
-        $query .= $self->_filter_host_group;
+        $query .= $self->_filter(
+            { param => 'hostgroup', operator => '>=', column => 'host_groups' }
+        );
     }
 
-    $self->app->log->debug("Query: " . $query);
+    $self->app->log->debug( "Query: " . $query );
 
     my $connection = $self->_connect;
     my $results_ref = $self->_fetch( $connection, $query );
     $self->render( json => $results_ref );
 }
 
-sub _filter_host_group {
+sub _filter {
     my $self = shift;
+    my ($args) = @_;
 
     my $filter;
 
-    my @groups = split(/,/, $self->param('hostgroup'));
-    my @filters = map { sprintf("Filter: host_groups >= %s\n", $_) } @groups;
+    my @groups = split( /,/, $self->param( $args->{'param'} ) );
+    my @filters = map {
+        sprintf( "Filter: %s %s %s\n",
+            $args->{'column'}, $args->{'operator'}, $_ )
+    } @groups;
 
-    $filter .= join("",@filters);
-    if (scalar(@filters)>1) {
-        $filter .= sprintf("Or: %d", scalar(@filters));
+    $filter .= join( "", @filters );
+    if ( scalar(@filters) > 1 ) {
+        $filter .= sprintf( "Or: %d", scalar(@filters) );
     }
+
+    $self->app->log->debug( "Filter: " . $filter );
 
     return $filter;
 }
