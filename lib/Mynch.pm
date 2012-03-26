@@ -14,8 +14,8 @@ sub startup {
 
   $r->route('/json')->to(controller => 'json', action => 'raw');
 
-  $r->route('/hostgroup')->to(controller => 'livestatus', action => 'servicesbyhostgroup');
-  $r->route('/hostgroup/:hostgroup')->to(controller => 'livestatus', action => 'servicesbyhostgroup');
+  $r->route('/services')->to(controller => 'livestatus', action => 'servicesbyhostgroup');
+  $r->route('/services/hostgroup/:hostgroup')->to(controller => 'livestatus', action => 'servicesbyhostgroup');
 }
 
 1;
