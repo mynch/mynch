@@ -25,11 +25,10 @@ sub hostgroups {
 sub servicesbyhostgroup {
     my $self = shift;
 
-    my @columns = qw{ host_name host_groups last_hard_state_change
-        display_name state plugin_output acknowledged
-        downtimes last_check next_check
-        last_notification current_attempt
-        max_check_attempts };
+    my @columns = qw{ host_groups host_name display_name state
+           acknowledged downtimes last_hard_state_change last_check
+           next_check last_notification current_attempt
+           max_check_attempts plugin_output };
 
     my $query;
     $query .= "GET servicesbyhostgroup\n";
@@ -46,7 +45,11 @@ sub servicesbyhostgroup {
 
     my $connection = $self->_connect;
     my $results_ref = $self->_fetch( $connection, $query );
-    $self->render( json => $results_ref );
+
+    # $self->render( json => $results_ref );
+    $self->stash(columns => \@columns);
+    $self->stash(results => $self->_massage($results_ref, \@columns));
+    $self->render;
 }
 
 sub _connect {
@@ -89,6 +92,24 @@ sub _filter {
     $self->app->log->debug( "Filter: " . $filter );
 
     return $filter;
+}
+
+sub _massage {
+    my $self        = shift;
+    my $src_ref     = shift;
+    my $columns_ref = shift;
+
+    my @src     = @$src_ref;
+    my @columns = @$columns_ref;
+    my @dst;
+
+    foreach (@src) {
+        my %tmp;
+        @tmp{@columns} = @$_;
+        push( @dst, {%tmp} );
+    }
+
+    return \@dst;
 }
 
 1;

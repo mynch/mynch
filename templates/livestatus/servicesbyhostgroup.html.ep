@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Services</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        % foreach my $header (@$columns) {
+        <th>
+          %= $header;
+        </th>
+        % }
+      </tr>
+      % foreach my $service (@$results) {
+      <tr>
+        % foreach my $column (@$columns) {
+        <td>
+          % my $data = $service->{$column};
+          % if (ref($data) eq "ARRAY") {
+          %= join (" ", @$data);
+          % }
+          % else {
+          % if (grep /^$column$/, qw{last_hard_state_change last_check next_check last_notification}) {
+          %= duration $data unless $data == 0
+          % }
+          % else {
+          %= $data;
+          % }
+          % }
+        </td>
+        % }
+      </tr>
+      % }
+    </table>
+  </body>
+</html>

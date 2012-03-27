@@ -1,10 +1,15 @@
 package Mynch;
 use Mojo::Base 'Mojolicious';
 
+use Mynch::Helpers;
+
 # This method will run once at server start
 sub startup {
     my $self = shift;
-    $self = $self->secret('very-secret-password');
+    $self->secret('very-secret-password');
+
+    # Plugins
+    $self->plugin('Mynch::Helpers');
 
     # Router
     my $r = $self->routes;
