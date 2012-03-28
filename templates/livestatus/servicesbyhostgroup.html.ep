@@ -1,44 +1,80 @@
 <!DOCTYPE html>
 <html>
   <head>
-    %# Include Twitter Bootstrap things here
+    <meta charset="utf-8">
     <title>Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link href="/bootstrap/css/bootstrap.css" rel="stylesheet">
+
+
   </head>
   <body>
-    <table>
-      <tr>
-        % foreach my $header (@$columns) {
-        <th>
-          %= $header;
-        </th>
-        % }
-      </tr>
-      % foreach my $service (@$results) {
-      <tr>
-        % foreach my $column (@$columns) {
-        <td>
-          %# For hostgroup_name, add rowspan and buttons
-          %# For host, add rowspan and buttons
-          %# For service, add buttons.
-          %# Buttons: remove until state change, collapse / summarize.
-          %# Service buttons: Ack, goto extinfo_url
-          %# Turn off (some) buttons if on wallscreen.
-          % my $data = $service->{$column};
-          % if (ref($data) eq "ARRAY") {
-          %= join (" ", @$data);
-          % }
-          % else {
-          % if (grep /^$column$/, qw{last_hard_state_change last_check next_check last_notification}) {
-          %= duration $data unless $data == 0
-          % }
-          % else {
-          %= $data;
-          % }
-          % }
-        </td>
-        % }
-      </tr>
-      % }
-    </table>
+    %# Place this in a "top" template
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+	<div class="container">
+	  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	    <span class="icon-bar"></span>
+	  </a>
+	  <a class="brand" href="#">Project name</a>
+	  <div class="nav-collapse">
+	    <ul class="nav">
+	      <li class="active"><a href="#">Home</a></li>
+	      <li><a href="#about">About</a></li>
+	      <li><a href="#contact">Contact</a></li>
+	    </ul>
+	  </div><!--/.nav-collapse -->
+	</div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <table>
+	<tr>
+	  % foreach my $header (@$columns) {
+	  <th>
+	    %= $header;
+	  </th>
+	  % }
+	</tr>
+	% foreach my $service (@$results) {
+	<tr>
+	  % foreach my $column (@$columns) {
+	  <td>
+	    %# For hostgroup_name, add rowspan and buttons
+	    %# For host, add rowspan and buttons
+	    %# For service, add buttons.
+	    %# Buttons: remove until state change, collapse / summarize.
+	    %# Service buttons: Ack, goto extinfo_url
+	    %# Turn off (some) buttons if on wallscreen.
+	    % my $data = $service->{$column};
+	    % if (ref($data) eq "ARRAY") {
+	    %= join (" ", @$data);
+	    % }
+	    % else {
+	    % if (grep /^$column$/, qw{last_hard_state_change last_check next_check last_notification}) {
+	    %= duration $data unless $data == 0
+	    % }
+	    % else {
+	    %= $data;
+	    % }
+	    % }
+	  </td>
+	  % }
+	</tr>
+	% }
+      </table>
+
+    </div>
+
+    # Place this in a "bottom" template.
+    <script src="/bootstrap/js/bootstrap.js"></script>
+
   </body>
 </html>
