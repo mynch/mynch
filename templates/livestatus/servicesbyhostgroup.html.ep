@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    %# Include Twitter Bootstrap things here
     <title>Services</title>
   </head>
   <body>
@@ -16,6 +17,12 @@
       <tr>
         % foreach my $column (@$columns) {
         <td>
+          %# For hostgroup_name, add rowspan and buttons
+          %# For host, add rowspan and buttons
+          %# For service, add buttons.
+          %# Buttons: remove until state change, collapse / summarize.
+          %# Service buttons: Ack, goto extinfo_url
+          %# Turn off (some) buttons if on wallscreen.
           % my $data = $service->{$column};
           % if (ref($data) eq "ARRAY") {
           %= join (" ", @$data);
