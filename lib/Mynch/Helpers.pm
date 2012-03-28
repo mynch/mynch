@@ -18,6 +18,35 @@ sub register {
         }
     );
 
+    $app->helper (
+        field_title => sub {
+            my $self = shift;
+            my $field = shift;
+
+            ...;
+
+            my $fields = {
+                host_groups => 'hostgroup',
+                display_name => 'name',
+            };
+
+            return $fields->{$field};
+        }
+    );
+
+    $app->helper (
+        get_hostgroup_buttons => sub {
+            my $self = shift;
+            my $hostgroup = shift; # Get from object instead?
+
+            my $buttons;
+
+            ...;
+
+            return $buttons;
+
+        }
+    );
 }
 
 1;
