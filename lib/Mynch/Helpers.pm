@@ -23,8 +23,6 @@ sub register {
             my $self = shift;
             my $field = shift;
 
-            ...;
-
             my $fields = {
                 host_groups => 'hostgroup',
                 display_name => 'name',
@@ -40,8 +38,6 @@ sub register {
             my $hostgroup = shift; # Get from object instead?
 
             my $buttons;
-
-            ...;
 
             return $buttons;
 
