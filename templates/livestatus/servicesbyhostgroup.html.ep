@@ -73,7 +73,7 @@
 
     </div>
 
-    # Place this in a "bottom" template.
+    %# Place this in a "bottom" template.
     <script src="/bootstrap/js/bootstrap.js"></script>
 
   </body>
