@@ -9,6 +9,7 @@ sub startup {
     $self->secret('very-secret-password');
 
     # Plugins
+    $self->plugin('PODRenderer');
     $self->plugin('Mynch::Helpers');
 
     # Router
