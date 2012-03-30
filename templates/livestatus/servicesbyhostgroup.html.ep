@@ -4,32 +4,35 @@
   <tr>
     % foreach my $header (@$columns) {
     <th>
-      %= $header;
+      %= field_title $header;
     </th>
     % }
   </tr>
   % foreach my $service (@$results) {
   <tr>
     % foreach my $column (@$columns) {
+    %   my $data = $service->{$column};
+    %   if (ref($data) eq "ARRAY") {
+    %     $data =  join (" ", @$data);
+    %   }
+    %#
+    %   if (grep /^$column$/, qw{last_hard_state_change last_check next_check last_notification}) {
+    %     if ($data == 0) {
+    %       $data = '';
+    %     }
+    %     else {
+    %     $data = duration $data
+    %     }
+    %   }
     <td>
       %# For hostgroup_name, add rowspan and buttons
       %# For host, add rowspan and buttons
       %# For service, add buttons.
       %# Buttons: remove until state change, collapse / summarize.
+      %# For state: add <span class="label label-success">Success</span> or similar
       %# Service buttons: Ack, goto extinfo_url
       %# Turn off (some) buttons if on wallscreen.
-      % my $data = $service->{$column};
-      % if (ref($data) eq "ARRAY") {
-      %= join (" ", @$data);
-      % }
-      % else {
-      % if (grep /^$column$/, qw{last_hard_state_change last_check next_check last_notification}) {
-      %= duration $data unless $data == 0
-      % }
-      % else {
       %= $data;
-      % }
-      % }
     </td>
     % }
   </tr>
