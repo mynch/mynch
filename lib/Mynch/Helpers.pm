@@ -25,7 +25,10 @@ sub register {
 
             my $fields = {
                 host_groups => 'hostgroup',
-                display_name => 'name',
+                host_display_name => 'host',
+                display_name => 'service',
+                state => 'state',
+                plugin_output => 'output',
             };
 
             return $fields->{$field};
@@ -35,8 +38,6 @@ sub register {
     $app->helper (
         get_hostgroup_buttons => sub {
             my $self = shift;
-            my $hostgroup = shift; # Get from object instead?
-
             my $buttons;
 
             return $buttons;
@@ -59,6 +60,11 @@ sub register {
             my $html = sprintf('<span class="label %s">%s</span>',
                                $states->{$state}->{label},
                                $states->{$state}->{text});
+
+            if ( $state ne '0' ) {
+                $html .= ' <button class="btn-mini" type ="submit"><i class="icon-repeat"></i></button> ';
+                $html .= ' <button class="btn-mini" type ="submit"><i class="icon-ok"></i></button> ';
+            }
             return $html;
         }
     );
