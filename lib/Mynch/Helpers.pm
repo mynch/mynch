@@ -43,6 +43,25 @@ sub register {
 
         }
     );
+
+    $app->helper (
+        format_state => sub {
+            my $self = shift;
+            my $state = shift;
+
+            my $states = {
+                0 => { text => 'ok',        label => 'label-success' },
+                1 => { text => 'warning',   label => 'label-warning' },
+                2 => { text => 'critical',  label => 'label-important' },
+                3 => { text => 'unknown',   label => 'label-info' },
+                4 => { text => 'dependent', label => 'label-info' },
+            };
+            my $html = sprintf('<span class="label %s">%s</span>',
+                               $states->{$state}->{label},
+                               $states->{$state}->{text});
+            return $html;
+        }
+    );
 }
 
 1;
