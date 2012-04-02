@@ -1,0 +1,77 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span8">
+      <h2>Current problems</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>host</th>
+            <th>service</th>
+            <th>duration</th>
+            <th>notification</th>
+            <th>output</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $service (@$results) {
+          <tr>
+            <td>
+              %== format_state $service->{state}
+            </td>
+            <td>
+              %= $service->{host_name}
+            </td>
+            <td>
+              %= $service->{display_name}
+            </td>
+            <td>
+              %= duration $service->{last_hard_state_change}
+            </td>
+            <td>
+              %= duration $service->{last_notification}
+            </td>
+            <td>
+              %= $service->{plugin_output}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+    <div class="span4">
+      <h2>Recent events</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>age</th>
+            <th>host</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $logentry ( @{ $log->{data} } ) {
+          <tr>
+            <td>
+              %== format_state $logentry->{state}
+              %= $logentry->{state_type}
+            </td>
+            <td>
+              %= duration $logentry->{time}
+            </td>
+            <td>
+              %= $logentry->{host_name}
+            </td>
+            <td>
+              %= $logentry->{service_description}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

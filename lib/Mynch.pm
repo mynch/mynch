@@ -24,6 +24,9 @@ sub startup {
         ->to( controller => 'livestatus', action => 'servicesbyhostgroup' );
     $r->route('/services/hostgroup/:hostgroup')
         ->to( controller => 'livestatus', action => 'servicesbyhostgroup' );
+
+    $r->route('/wallscreen')
+        ->to(controller => 'livestatus', action => 'wallscreen' );
 }
 
 1;

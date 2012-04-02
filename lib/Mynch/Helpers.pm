@@ -14,7 +14,13 @@ sub register {
         duration => sub {
             my $self = shift;
             my $time = shift;
-            return concise( duration( time() - $time ) );
+            my $duration;
+
+            if ($time > 0) {
+                $duration = concise( duration( time() - $time ) );
+            }
+
+            return $duration;
         }
     );
 
@@ -24,11 +30,15 @@ sub register {
             my $field = shift;
 
             my $fields = {
-                host_groups => 'hostgroup',
-                host_display_name => 'host',
-                display_name => 'service',
-                state => 'state',
-                plugin_output => 'output',
+                display_name           => 'service', # ambiguous
+                host_display_name      => 'host',
+                host_groups            => 'hostgroup',
+                host_name              => 'host',
+                last_check             => 'last check',
+                last_hard_state_change => 'duration',
+                next_check             => 'next check',
+                plugin_output          => 'output',
+                state                  => 'state',
             };
 
             return $fields->{$field};
@@ -36,12 +46,22 @@ sub register {
     );
 
     $app->helper (
-        get_hostgroup_buttons => sub {
+        button_recheck => sub {
             my $self = shift;
-            my $buttons;
+            my $state = shift;
 
-            return $buttons;
+            my $html = '<button class="btn-mini" type ="submit"><i class="icon-repeat"></i></button>';
+            return $html;
+        }
+    );
 
+    $app->helper (
+        button_acknowledge => sub {
+            my $self = shift;
+            my $state = shift;
+
+            my $html = '<button class="btn-mini" type ="submit"><i class="icon-ok"></i></button>';
+            return $html;
         }
     );
 
@@ -61,10 +81,6 @@ sub register {
                                $states->{$state}->{label},
                                $states->{$state}->{text});
 
-            if ( $state ne '0' ) {
-                $html .= ' <button class="btn-mini" type ="submit"><i class="icon-repeat"></i></button> ';
-                $html .= ' <button class="btn-mini" type ="submit"><i class="icon-ok"></i></button> ';
-            }
             return $html;
         }
     );
