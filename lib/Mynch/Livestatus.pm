@@ -108,8 +108,12 @@ sub _wallscreen_main {
     my $connection = $self->_connect;
     my $results_ref = $self->_fetch( $connection, $query );
 
-    $self->stash(columns => \@columns);
-    $self->stash(results => $self->_massage($results_ref, \@columns));
+    $self->stash(
+        main => {
+            columns => \@columns,
+            data    => $self->_massage($results_ref, \@columns)
+        }
+    );
 
     return $results_ref;
 }
