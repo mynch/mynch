@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $service ( @{ $main->{data} } ) {
+          % foreach my $service ( sort { $b->{state} <=> $a->{state} || $b->{last_hard_state_change} <=> $a->{last_hard_state_change} } @{ $main->{data} } ) {
           <tr>
             <td>
               %== format_state $service->{state}
