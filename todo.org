@@ -1,0 +1,42 @@
+* View
+
+** Wallscreen
+
+   No state, no actions
+
+*** Sections
+    All services not in OK state
+
+    Recent events
+
+    Graphs and diagrams
+
+    Do this first. No state needed for this.
+
+** Worker
+
+   Needs state, need actions
+
+*** Sections
+    Primary, Secondary, Team, Other
+
+*** Actions
+    Ignore, Acknowledge
+
+* Code
+
+** Quantum::Superposition
+   Adds "any" and "all" operators. Useful.
+
+** Sessions
+   Store session data in signed cookie.
+
+** Add more sources
+
+   Several icinga servers...  Will the data structures change?
+
+** Ignore hostgroup, host, host+service
+
+   Until unignored?
+
+   Until state changes.
