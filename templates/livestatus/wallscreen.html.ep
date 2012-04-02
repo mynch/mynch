@@ -56,8 +56,7 @@
           % foreach my $logentry ( @{ $log->{data} } ) {
           <tr>
             <td>
-              %== format_state $logentry->{state}
-              %= $logentry->{state_type}
+              %== format_state_log $logentry
             </td>
             <td>
               %= duration $logentry->{time}

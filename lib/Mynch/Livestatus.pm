@@ -75,7 +75,7 @@ sub _wallscreen_log {
 
     my $since = time() - 86400; # 1 day
 
-    my @columns = qw{ type time state state_type host_name service_description };
+    my @columns = qw{ type time state state_type host_name service_description current_service_current_attempt current_service_max_check_attempts };
     my $query;
     $query .= "GET log\n";
     $query .= sprintf("Columns: %s\n", join( " ", @columns ) );
