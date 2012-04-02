@@ -75,7 +75,7 @@ sub _wallscreen_log {
 
     my $since = time() - 86400; # 1 day
 
-    my @columns = qw{ type time state state_type host_name service_description current_service_current_attempt current_service_max_check_attempts };
+    my @columns = qw{ type time state state_type host_name service_description current_service_max_check_attempts attempt };
     my $query;
     $query .= "GET log\n";
     $query .= sprintf("Columns: %s\n", join( " ", @columns ) );
@@ -96,9 +96,10 @@ sub _wallscreen_main {
     my $self = shift;
 
     my @columns = qw{ host_groups host_name display_name state
-           acknowledged downtimes last_hard_state_change last_check
-           next_check last_notification current_attempt
-           max_check_attempts plugin_output };
+           state_type acknowledged downtimes last_state_change
+           last_hard_state_change last_check next_check
+           last_notification current_attempt max_check_attempts
+           plugin_output };
 
     my $query;
     $query .= "GET servicesbyhostgroup\n";

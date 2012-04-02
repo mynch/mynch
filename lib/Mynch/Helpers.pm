@@ -90,9 +90,9 @@ sub register {
     );
 
     $app->helper(
-        format_state_log => sub {
-            my $self     = shift;
-            my $logentry = shift;
+        format_state_new => sub {
+            my $self       = shift;
+            my $attributes = shift;
 
             my $states = {
                 0 => {
@@ -133,24 +133,28 @@ sub register {
             };
 
             # Unwrap, for readability
-            my $state_type      = $logentry->{state_type};
-            my $state           = $logentry->{state};
-            my $current_attempt = $logentry->{current_service_current_attempt};
-            my $max_check_attempts =
-              $logentry->{current_service_max_check_attempts};
+            my $state_type   = $attributes->{state_type};
+            my $state        = $attributes->{state};
+            my $attempt      = $attributes->{attempt};
+            my $max_attempts = $attributes->{max_attempts};
+
+            # Rewrite state_type, if "0" or "1" (from "GET servicesbyhostgroup")
+            if    ($state_type eq "0") { $state_type = "SOFT"; }
+            elsif ($state_type eq "1") { $state_type = "HARD"; }
 
             # Button content
             my $label = $states->{$state}->{label}->{$state_type};
             my $text  = $states->{$state}->{text};
 
+            # Extra text for SOFT non-OK entries
+            if ( $state_type eq "SOFT" and $state ne '0' ) {
+                $text .= sprintf( "&nbsp;(%d/%d)",
+                                  $attempt, $max_attempts, );
+            }
+
             my $html =
               sprintf( '<span class="label %s">%s</span>', $label, $text );
 
-            # Extra text for SOFT non-OK entries
-            if ( $state_type eq "SOFT" and $state ne '0' ) {
-                $html .= sprintf( "&nbsp;(%d/%d)",
-                    $current_attempt, $max_check_attempts, );
-            }
 
             return $html;
         }

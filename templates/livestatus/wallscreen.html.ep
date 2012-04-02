@@ -16,10 +16,10 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $service ( sort { $b->{state} <=> $a->{state} || $b->{last_hard_state_change} <=> $a->{last_hard_state_change} } @{ $main->{data} } ) {
+          % foreach my $service ( sort { $b->{state} <=> $a->{state} || $b->{last_state_change} <=> $a->{last_state_change} } @{ $main->{data} } ) {
           <tr>
             <td>
-              %== format_state $service->{state}
+              %== format_state_new ( { state => $service->{state}, state_type => $service->{state_type}, attempt => $service->{current_attempt}, max_attempts => $service->{max_check_attempts} } )
             </td>
             <td>
               %= $service->{host_name}
@@ -56,7 +56,7 @@
           % foreach my $logentry ( @{ $log->{data} } ) {
           <tr>
             <td>
-              %== format_state_log $logentry
+              %== format_state_new ( { state => $logentry->{state}, state_type => $logentry->{state_type}, attempt => $logentry->{attempt}, max_attempts => $logentry->{current_service_max_check_attempts} } )
             </td>
             <td>
               %= duration $logentry->{time}
