@@ -2,16 +2,23 @@
 
 ** Wallscreen
 
+   Do this first. No state needed for this.
+
    No state, no actions
 
 *** Sections
-    All services not in OK state
 
-    Recent events
+**** All services not in OK state
 
-    Graphs and diagrams
+     Abbreviate plugin output?  (Complete output on mouseover)
 
-    Do this first. No state needed for this.
+**** Recent events
+
+     For SOFT state, change color to grey, and add 1/4, 2/4, etc...
+
+**** Graphs and diagrams
+
+     Add eyecandy.
 
 ** Worker
 
