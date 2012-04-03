@@ -17,28 +17,6 @@ sub fetch {
     return $results_ref;
 }
 
-sub _filter {
-    my $self = shift;
-    my ($args) = @_;
-
-    my $filter;
-
-    my @groups = split( /,/, $self->param( $args->{'param'} ) );
-    my @filters = map {
-        sprintf( "Filter: %s %s %s\n",
-            $args->{'column'}, $args->{'operator'}, $_ )
-    } @groups;
-
-    $filter .= join( "", @filters );
-    if ( scalar(@filters) > 1 ) {
-        $filter .= sprintf( "Or: %d", scalar(@filters) );
-    }
-
-    $self->app->log->debug( "Filter: " . $filter );
-
-    return $filter;
-}
-
 sub massage {
     my $self        = shift;
     my $src_ref     = shift;
