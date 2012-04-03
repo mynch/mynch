@@ -29,7 +29,7 @@ sub log_data {
 
     my $data_ref = $ls->massage( $results_ref, \@columns );
 
-    $self->stash( log_content => $data_ref );
+    $self->stash( log_entries => $data_ref );
 }
 
 sub status_data {

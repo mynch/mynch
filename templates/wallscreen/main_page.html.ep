@@ -53,19 +53,19 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $logentry ( @{ $log_content } ) {
+          % foreach my $log_entry ( @{ $log_entries } ) {
           <tr>
             <td>
-              %== format_state_new ( { state => $logentry->{state}, state_type => $logentry->{state_type}, attempt => $logentry->{attempt}, max_attempts => $logentry->{current_service_max_check_attempts} } )
+              %== format_state_new ( { state => $log_entry->{state}, state_type => $log_entry->{state_type}, attempt => $log_entry->{attempt}, max_attempts => $log_entry->{current_service_max_check_attempts} } )
             </td>
             <td>
-              %= duration $logentry->{time}
+              %= duration $log_entry->{time}
             </td>
             <td>
-              %= $logentry->{host_name}
+              %= $log_entry->{host_name}
             </td>
             <td>
-              %= $logentry->{service_description}
+              %= $log_entry->{service_description}
             </td>
           </tr>
           % }
