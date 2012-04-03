@@ -1,7 +1,6 @@
 package Mynch::Wallscreen;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
-use strict;
 
 sub log_page {
     my $self = shift;
@@ -26,12 +25,11 @@ sub log_data {
     $query .= "Filter: time >= $since\n";
     $query .= "Filter: type = SERVICE ALERT\n";
 
-    my $connection = $ls->_connect;
-    my $results_ref = $ls->_fetch( $connection, $query );
+    my $results_ref = $ls->fetch( $query );
 
-    my $data_ref = $ls->_massage( $results_ref, \@columns );
+    my $data_ref = $ls->massage( $results_ref, \@columns );
 
-    $self->stash( log => $data_ref );
+    $self->stash( log_content => $data_ref );
 }
 
 sub status_data {
@@ -49,12 +47,11 @@ sub status_data {
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: state != 0\n";
 
-    my $connection = $ls->_connect;
-    my $results_ref = $ls->_fetch( $connection, $query );
+    my $results_ref = $ls->fetch( $query );
 
-    my $status_ref = $ls->_massage($results_ref, \@columns);
+    my $status_ref = $ls->massage($results_ref, \@columns);
 
-    $self->stash( status => $status_ref );
+    $self->stash( status_content => $status_ref );
 }
 
 sub status_page {
@@ -71,3 +68,5 @@ sub main_page {
     $self->log_data;
     $self->render;
 }
+
+1;

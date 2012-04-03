@@ -15,23 +15,12 @@ sub startup {
     # Router
     my $r = $self->routes;
 
-    $r->route('/hostgroups')
-        ->to( controller => 'livestatus', action => 'hostgroups' );
-    $r->route('/hostgroups/:hostgroup')
-        ->to( controller => 'livestatus', action => 'hostgroups' );
-
-    $r->route('/services')
-        ->to( controller => 'livestatus', action => 'servicesbyhostgroup' );
-    $r->route('/services/hostgroup/:hostgroup')
-        ->to( controller => 'livestatus', action => 'servicesbyhostgroup' );
-
     $r->route('/wallscreen')
         ->to(controller => 'wallscreen', action => 'main_page' );
     $r->route('/wallscreen/status')
         ->to(controller => 'wallscreen', action => 'status_page' );
     $r->route('/wallscreen/log')
         ->to(controller => 'wallscreen', action => 'log_page' );
-
 
 }
 

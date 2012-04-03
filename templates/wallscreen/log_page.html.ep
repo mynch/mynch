@@ -14,7 +14,7 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $logentry ( @{ $log } ) {
+          % foreach my $logentry ( @{ $log_content } ) {
           <tr>
             <td>
               %== format_state_new ( { state => $logentry->{state}, state_type => $logentry->{state_type}, attempt => $logentry->{attempt}, max_attempts => $logentry->{current_service_max_check_attempts} } )
