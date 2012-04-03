@@ -54,6 +54,40 @@ sub status_data {
     $self->stash( status_content => $status_ref );
 }
 
+sub hostgroup_status_data {
+    my $self = shift;
+    my $ls = Mynch::Livestatus->new;
+
+    my @columns = qw { members members_with_state name num_hosts
+                       num_hosts_down num_hosts_pending
+                       num_hosts_unreach num_hosts_up num_services
+                       num_services_crit num_services_hard_crit
+                       num_services_hard_ok num_services_hard_unknown
+                       num_services_hard_warn num_services_ok
+                       num_services_pending num_services_unknown
+                       num_services_warn worst_host_state
+                       worst_service_hard_state worst_service_state };
+
+    my $query;
+    $query .= "GET hostgroups\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: worst_service_state != 0\n";
+    $query .= "Filter: worst_host_state != 0\n";
+    $query .= "Or: 2\n";
+
+    my $results_ref = $ls->fetch( $query );
+    my $hostgroup_status_ref = $ls->massage($results_ref, \@columns);
+    $self->stash( hostgroup_status_content => $hostgroup_status_ref );
+
+}
+
+sub hostgroup_status_page {
+    my $self = shift;
+
+    $self->hostgroup_status_data;
+    $self->render;
+}
+
 sub status_page {
     my $self = shift;
 
