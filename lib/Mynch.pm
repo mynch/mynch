@@ -26,7 +26,9 @@ sub startup {
         ->to( controller => 'livestatus', action => 'servicesbyhostgroup' );
 
     $r->route('/wallscreen')
-        ->to(controller => 'livestatus', action => 'wallscreen' );
+        ->to(controller => 'wallscreen', action => 'main_page' );
+    $r->route('/wallscreen/status')
+        ->to(controller => 'wallscreen', action => 'status_page' );
     $r->route('/wallscreen/log')
         ->to(controller => 'wallscreen', action => 'log_page' );
 
