@@ -77,7 +77,7 @@ sub hostgroup_status_data {
 
     my $results_ref = $ls->fetch( $query );
     my $hostgroup_status_ref = $ls->massage($results_ref, \@columns);
-    $self->stash( hostgroup_status_content => $hostgroup_status_ref );
+    $self->stash( hostgroups => $hostgroup_status_ref );
 
 }
 

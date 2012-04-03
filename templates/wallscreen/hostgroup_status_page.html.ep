@@ -7,7 +7,7 @@
     </div>
   </div>
   <div class="row-fluid">
-    % foreach my $hostgroup ( @{ $hostgroup_status_content } ) {
+    % foreach my $hostgroup ( hostgroup_sort ( $hostgroups ) ) {
     % my $background = hostgroup_background($hostgroup);
     <div class="span3 <%= $background %>">
       <h3><%= $hostgroup->{name} %></h3>

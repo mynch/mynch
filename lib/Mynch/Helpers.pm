@@ -66,6 +66,31 @@ sub register {
     );
 
     $app->helper(
+        hostgroup_sort => sub {
+            my $self           = shift;
+            my $hostgroups_ref = shift;
+
+            my @hostgroups = @{ $hostgroups_ref };
+
+            my $weight = {
+                0 => 4,
+                1 => 1,
+                2 => 0,
+                3 => 2,
+                4 => 3,
+            };
+
+
+            my @sorted = sort {
+                $weight->{$a->{worst_host_state}} <=> $weight->{$b->{worst_host_state}} ||
+                    $weight->{$a->{worst_service_state}} <=> $weight->{$b->{worst_service_state}}
+                } @hostgroups;
+
+            return @sorted;
+        }
+    );
+
+    $app->helper(
         button_recheck => sub {
             my $self  = shift;
             my $state = shift;
