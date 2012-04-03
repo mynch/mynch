@@ -51,7 +51,7 @@ sub status_data {
 
     my $status_ref = $ls->massage($results_ref, \@columns);
 
-    $self->stash( status_content => $status_ref );
+    $self->stash( services => $status_ref );
 }
 
 sub hostgroup_status_data {
