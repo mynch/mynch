@@ -46,6 +46,26 @@ sub register {
     );
 
     $app->helper(
+        hostgroup_background => sub {
+            my $self      = shift;
+            my $hostgroup = shift;
+
+            my $background = {
+                0 => 'alert alert-success',
+                1 => 'alert',
+                2 => 'alert alert-error',
+                3 => 'alert alert-info',
+            };
+
+            my @states = ($hostgroup->{worst_service_state},
+                          $hostgroup->{worst_host_state});
+
+            my @worst = sort { $b <=> $a } @states;
+            return $background->{$worst[0]};
+        }
+    );
+
+    $app->helper(
         button_recheck => sub {
             my $self  = shift;
             my $state = shift;
