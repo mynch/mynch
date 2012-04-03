@@ -91,6 +91,30 @@ sub register {
     );
 
     $app->helper(
+        servicesbyhostgroup_sort => sub {
+            my $self         = shift;
+            my $services_ref = shift;
+
+            my @services = @{ $services_ref };
+
+            my $weight = {
+                0 => 4,
+                1 => 1,
+                2 => 0,
+                3 => 2,
+                4 => 3,
+            };
+
+            my @sorted = sort {
+                $weight->{$a->{state}} <=> $weight->{$b->{state}} ||
+                    $a->{last_state_change} <=> $b->{last_state_change}
+                } @services;
+
+            return @sorted;
+        }
+    );
+
+    $app->helper(
         button_recheck => sub {
             my $self  = shift;
             my $state = shift;

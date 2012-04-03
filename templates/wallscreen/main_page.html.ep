@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $service ( sort { $b->{state} <=> $a->{state} || $b->{last_state_change} <=> $a->{last_state_change} } @{ $services } ) {
+          % foreach my $service ( servicesbyhostgroup_sort( $services ) ) {
           <tr>
             <td>
               %== format_state_new ( { state => $service->{state}, state_type => $service->{state_type}, attempt => $service->{current_attempt}, max_attempts => $service->{max_check_attempts} } )
