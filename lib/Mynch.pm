@@ -27,6 +27,10 @@ sub startup {
 
     $r->route('/wallscreen')
         ->to(controller => 'livestatus', action => 'wallscreen' );
+    $r->route('/wallscreen/log')
+        ->to(controller => 'wallscreen', action => 'log_page' );
+
+
 }
 
 1;

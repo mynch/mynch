@@ -1,0 +1,37 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Recent events</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>age</th>
+            <th>host</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $logentry ( @{ $log } ) {
+          <tr>
+            <td>
+              %== format_state_new ( { state => $logentry->{state}, state_type => $logentry->{state_type}, attempt => $logentry->{attempt}, max_attempts => $logentry->{current_service_max_check_attempts} } )
+            </td>
+            <td>
+              %= duration $logentry->{time}
+            </td>
+            <td>
+              %= $logentry->{host_name}
+            </td>
+            <td>
+              %= $logentry->{service_description}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
