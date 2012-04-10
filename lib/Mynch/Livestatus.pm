@@ -4,8 +4,10 @@ use Monitoring::Livestatus;
 
 sub connect {
     my $self = shift;
+    my $config_ref = $self->{config};
+    my %config = %{ $config_ref };
 
-    my $conn = Monitoring::Livestatus->new( server => $self->{config}->{server}, );
+    my $conn = Monitoring::Livestatus->new( %config );
 
     return $conn;
 }
