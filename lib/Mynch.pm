@@ -6,12 +6,15 @@ use Mynch::Helpers;
 # This method will run once at server start
 sub startup {
     my $self = shift;
-    $self->secret('very-secret-password');
 
     # Plugins
     $self->plugin('PODRenderer');
     $self->plugin('Mynch::Helpers');
     $self->plugin('Config');
+
+    if ($self->config->{secret}) {
+        $self->secret($self->config->{secret});
+    }
 
     # Router
     my $r = $self->routes;
