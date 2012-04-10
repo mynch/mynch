@@ -11,6 +11,7 @@ sub startup {
     # Plugins
     $self->plugin('PODRenderer');
     $self->plugin('Mynch::Helpers');
+    $self->plugin('Config');
 
     # Router
     my $r = $self->routes;

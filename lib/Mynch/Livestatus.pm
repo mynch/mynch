@@ -2,12 +2,18 @@ package Mynch::Livestatus;
 use Mojo::Base -base;
 use Monitoring::Livestatus;
 
+sub connect {
+    my $self = shift;
+
+    my $conn = Monitoring::Livestatus->new( server => $self->{config}->{server}, );
+
+    return $conn;
+}
+
 sub fetch {
     my $self  = shift;
     my $query = shift;
-
-    my $conn
-        = Monitoring::Livestatus->new( server => 'icinga.example.org:6557', );
+    my $conn = $self->connect;
 
     my $results_ref = $conn->selectall_arrayref($query);
 

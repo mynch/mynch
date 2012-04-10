@@ -11,7 +11,7 @@ sub log_page {
 
 sub log_data {
     my $self = shift;
-    my $ls   = Mynch::Livestatus->new;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my $since = time() - 600;    # 10 minutes of log data
 
@@ -34,7 +34,7 @@ sub log_data {
 
 sub status_data {
     my $self = shift;
-    my $ls   = Mynch::Livestatus->new;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ host_groups host_name display_name state
            state_type acknowledged downtimes last_state_change
@@ -56,7 +56,7 @@ sub status_data {
 
 sub hostgroup_status_data {
     my $self = shift;
-    my $ls = Mynch::Livestatus->new;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw { members members_with_state name num_hosts
                        num_hosts_down num_hosts_pending
