@@ -159,7 +159,7 @@ sub register {
     );
 
     $app->helper(
-        format_state_new => sub {
+        service_state_label => sub {
             my $self       = shift;
             my $attributes = shift;
 

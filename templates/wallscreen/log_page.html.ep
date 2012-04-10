@@ -15,9 +15,15 @@
         </thead>
         <tbody>
           % foreach my $log_entry ( @{ $log_entries } ) {
+          % my $label_items = {
+          %   state        => $log_entry->{state},
+          %   state_type   => $log_entry->{state_type},
+          %   attempt      => $log_entry->{attempt},
+          %   max_attempts => $log_entry->{current_service_max_check_attempts},
+          % };
           <tr>
             <td>
-              %== format_state_new ( { state => $log_entry->{state}, state_type => $log_entry->{state_type}, attempt => $log_entry->{attempt}, max_attempts => $log_entry->{current_service_max_check_attempts} } )
+              %== service_state_label ( $label_items )
             </td>
             <td>
               %= duration $log_entry->{time}
