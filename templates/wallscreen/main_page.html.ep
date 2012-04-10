@@ -11,8 +11,6 @@
             <th>host</th>
             <th>service</th>
             <th>duration</th>
-            <th>notification</th>
-            <th>output</th>
           </tr>
         </thead>
         <tbody>
@@ -35,12 +33,7 @@
             </td>
             <td>
               %= duration $service->{last_hard_state_change}
-            </td>
-            <td>
               %= duration $service->{last_notification}
-            </td>
-            <td>
-              %= $service->{plugin_output}
             </td>
           </tr>
           % }

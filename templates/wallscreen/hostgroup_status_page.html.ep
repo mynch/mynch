@@ -6,10 +6,10 @@
       <h2>Current hostgroup status</h2>
     </div>
   </div>
-  <div class="row-fluid">
+  <div class="row">
     % foreach my $hostgroup ( hostgroup_sort ( $hostgroups ) ) {
     % my $background = hostgroup_background($hostgroup);
-    <div class="span3 <%= $background %>">
+    <div class="span2 <%= $background %>">
       <h3><%= $hostgroup->{name} %></h3>
       <table>
         <tr>
