@@ -28,6 +28,9 @@ sub startup {
     $r->route('/wallscreen/hostgroups')
         ->to(controller => 'wallscreen', action => 'hostgroup_status_page' );
 
+    $r->route('/wallscreen/problems')
+        ->to(controller => 'wallscreen', action => 'problem_page' );
+
 }
 
 1;

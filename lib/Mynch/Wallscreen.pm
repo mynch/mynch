@@ -66,6 +66,28 @@ sub status_data {
     $self->stash( services => $status_ref );
 }
 
+
+sub problem_data {
+    my $self = shift;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ hostgroup_name };
+
+    my $query;
+    $query .= "GET servicesbyhostgroup\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: hostgroup_name != x-old-nagios\n";
+    $query .= "Stats: state = 3\n";
+    $query .= "Stats: plugin_output = UNKNOWN: No current data from munin\n";
+    $query .= "StatsAnd: 2\n";
+
+    my $results_ref = $ls->fetch( $query );
+
+    my @sorted = sort { $b->[1] <=> $a->[1]} @{ $results_ref };
+    $self->stash( hostgroups => \@sorted );
+}
+
+
 sub hostgroup_status_data {
     my $self = shift;
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
@@ -115,4 +137,10 @@ sub main_page {
     $self->render;
 }
 
+sub problem_page {
+    my $self = shift;
+
+    $self->problem_data;
+    $self->render;
+}
 1;
