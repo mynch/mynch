@@ -8,9 +8,9 @@
         <thead>
           <tr>
             <th>state</th>
+            <th>duration</th>
             <th>host</th>
             <th>service</th>
-            <th>duration</th>
           </tr>
         </thead>
         <tbody>
@@ -26,14 +26,14 @@
               %== service_state_label ( $label_items )
             </td>
             <td>
+              %= duration $service->{last_hard_state_change}
+              %= duration $service->{last_notification}
+            </td>
+            <td>
               %= $service->{host_name}
             </td>
             <td>
               %= $service->{display_name}
-            </td>
-            <td>
-              %= duration $service->{last_hard_state_change}
-              %= duration $service->{last_notification}
             </td>
           </tr>
           % }
