@@ -50,18 +50,35 @@ sub register {
             my $self      = shift;
             my $hostgroup = shift;
 
-            my $background = {
-                0 => 'alert alert-success',
-                1 => 'alert',
-                2 => 'alert alert-error',
-                3 => 'alert alert-info',
+            my $backgrounds = {
+                up       => 'alert alert-success',
+                down     => 'alert alert-error',
+                ok       => 'alert alert-success',
+                warning  => 'alert',
+                critical => 'alert alert-error',
+                unknown  => 'alert alert-info',
             };
 
-            my @states = ($hostgroup->{worst_service_state},
-                          $hostgroup->{worst_host_state});
+            my $host_states = {
+                0 => 'up',
+                1 => 'up',
+                2 => 'down',
+                3 => 'down',
+            };
 
-            my @worst = sort { $b <=> $a } @states;
-            return $background->{$worst[0]};
+            my $service_states = {
+                0 => 'ok',
+                1 => 'warning',
+                2 => 'critical',
+                3 => 'unknown',
+            };
+
+            if ($host_states->{$hostgroup->{worst_host_state}} ne 'up' ) {
+                return $backgrounds->{$host_states->{$hostgroup->{worst_host_state}}};
+            }
+            else {
+                return $backgrounds->{$service_states->{$hostgroup->{worst_service_state}}};
+            }
         }
     );
 
@@ -72,19 +89,25 @@ sub register {
 
             my @hostgroups = @{ $hostgroups_ref };
 
-            my $weight = {
+            my $service_weight = {
                 0 => 4,
                 1 => 1,
                 2 => 0,
                 3 => 2,
                 4 => 3,
             };
-
+            my $host_weight = {
+                0 => 4,
+                1 => 4,
+                2 => 0,
+                3 => 0,
+            };
 
             my @sorted = sort {
-                $weight->{$a->{worst_host_state}} <=> $weight->{$b->{worst_host_state}} ||
-                    $weight->{$a->{worst_service_state}} <=> $weight->{$b->{worst_service_state}}
-                } @hostgroups;
+                $host_weight->{$a->{worst_host_state}} <=> $host_weight->{$b->{worst_host_state}}
+                    ||
+                $service_weight->{$a->{worst_service_state}} <=> $service_weight->{$b->{worst_service_state}}
+            } @hostgroups;
 
             return @sorted;
         }
