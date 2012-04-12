@@ -1,6 +1,7 @@
 package Mynch::Wallscreen;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
+use List::MoreUtils qw{ uniq };
 
 sub log_page {
     my $self = shift;
@@ -67,7 +68,7 @@ sub status_data {
 }
 
 
-sub problem_data {
+sub problem_data_munin {
     my $self = shift;
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -84,9 +85,43 @@ sub problem_data {
     my $results_ref = $ls->fetch( $query );
 
     my @sorted = sort { $b->[1] <=> $a->[1]} @{ $results_ref };
-    $self->stash( hostgroups => \@sorted );
+    $self->stash( munin_hostgroups => \@sorted );
 }
 
+sub problem_data_mysql {
+    my $self = shift;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ host_display_name display_name };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: plugin_output ~ ^Access denied for user '.*'\@'.*'\n";
+
+    my $results_ref = $ls->fetch( $query );
+
+    my @sorted = sort { $a->[0] eq $b->[0]} @{ $results_ref };
+    $self->stash( mysql_services => \@sorted );
+}
+
+sub problem_data_nrpe {
+    my $self = shift;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ host_display_name };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: plugin_output = CHECK_NRPE: Error - Could not complete SSL handshake.\n";
+
+    my $results_ref = $ls->fetch( $query );
+
+    # ewww...
+    my @sorted = uniq map {@$_} sort { $a->[0] eq $b->[0]} @{ $results_ref };
+    $self->stash( nrpe_hosts => \@sorted );
+}
 
 sub hostgroup_summary {
     my $self = shift;
@@ -136,7 +171,10 @@ sub main_page {
 sub problem_page {
     my $self = shift;
 
-    $self->problem_data;
+    $self->problem_data_munin;
+    $self->problem_data_mysql;
+    $self->problem_data_nrpe;
+
     $self->render;
 }
 1;

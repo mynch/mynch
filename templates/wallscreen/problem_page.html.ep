@@ -16,7 +16,7 @@
           </tr>
         </thead>
         <tbody>
-          % foreach my $hostgroup ( @{ $hostgroups } ) {
+          % foreach my $hostgroup ( @{ $munin_hostgroups } ) {
           %   next if $hostgroup->[1] == 0;
           <tr>
             <td>
@@ -30,5 +30,62 @@
         </tbody>
       </table>
     </div>
+    <div class="span4">
+      <h2>MySQL authentication</h2>
+      <p>
+        A list of MySQL service checks where the host does not grant
+        access to icinga. The icinga service check may come from
+        different hosts, which may change. Solution: use NRPE, and
+        connect to the database from the local host.
+      </p>
+
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>host</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $service ( @{ $mysql_services } ) {
+          <tr>
+            <td>
+              %= $service->[0]
+            </td>
+            <td>
+              %= $service->[1]
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="span4">
+      <h2>NRPE Access</h2>
+      <p>
+        A list of hosts where the NRPE daemon does not accept
+        connections. Possible problems: The NRPE daemon does not have
+        the icinga network in its allowed list.
+      </p>
+
+       <table class="table table-condensed">
+         <thead>
+           <tr>
+             <th>host</th>
+           </tr>
+         </thead>
+         <tbody>
+           % foreach my $host ( @{ $nrpe_hosts } ) {
+           <tr>
+             <td>
+               %= $host
+             </td>
+           </tr>
+           % }
+         </tbody>
+       </table>
+    </div>
+
   </div>
 </div>
