@@ -88,25 +88,20 @@ sub problem_data {
 }
 
 
-sub hostgroup_status_data {
+sub hostgroup_summary {
     my $self = shift;
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
-    my @columns = qw { members members_with_state name num_hosts
-                       num_hosts_down num_hosts_pending
-                       num_hosts_unreach num_hosts_up num_services
-                       num_services_crit num_services_hard_crit
-                       num_services_hard_ok num_services_hard_unknown
-                       num_services_hard_warn num_services_ok
-                       num_services_pending num_services_unknown
-                       num_services_warn worst_host_state
-                       worst_service_hard_state worst_service_state };
+    my @columns = qw { name num_hosts_down num_hosts_unreach
+                       num_services_hard_crit num_services_crit
+                       num_services_hard_warn num_services_warn };
 
     my $query;
     $query .= "GET hostgroups\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
-    $query .= "Filter: worst_service_state != 0\n";
-    $query .= "Filter: worst_host_state != 0\n";
+    $query .= "Filter: hostgroup_name != x-old-nagios\n";
+    $query .= "Filter: num_services_crit > 0\n";
+    $query .= "Filter: num_hosts_down > 0\n";
     $query .= "Or: 2\n";
 
     my $results_ref = $ls->fetch( $query );
@@ -118,7 +113,7 @@ sub hostgroup_status_data {
 sub hostgroup_status_page {
     my $self = shift;
 
-    $self->hostgroup_status_data;
+    $self->hostgroup_summary;
     $self->render;
 }
 
@@ -134,6 +129,7 @@ sub main_page {
 
     $self->status_data;
     $self->log_data;
+    $self->hostgroup_summary;
     $self->render;
 }
 

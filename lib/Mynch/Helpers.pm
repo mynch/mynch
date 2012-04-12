@@ -104,9 +104,9 @@ sub register {
             };
 
             my @sorted = sort {
-                $host_weight->{$a->{worst_host_state}} <=> $host_weight->{$b->{worst_host_state}}
-                    ||
-                $service_weight->{$a->{worst_service_state}} <=> $service_weight->{$b->{worst_service_state}}
+                $b->{num_hosts_down} <=> $a->{num_hosts_down} ||
+                    $b->{num_services_crit} <=> $a->{num_services_crit} ||
+                    $b->{num_services_warn} <=> $a->{num_services_warn}
             } @hostgroups;
 
             return @sorted;

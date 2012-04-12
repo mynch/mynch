@@ -1,0 +1,40 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Current hostgroup status</h2>
+    </div>
+  </div>
+  <div class="row">
+    <table class="table table-striped table-condensed">
+      <thead>
+        <th>Hostgroup</th>
+        <th>Hosts</th>
+        <th>Services</th>
+      </thead>
+      <tbody>
+        % foreach my $hostgroup ( hostgroup_sort ( $hostgroups ) ) {
+        <tr>
+          <td><%= $hostgroup->{name} %></td>
+          <td>
+            % if ($hostgroup->{num_hosts_unreach} ne "0") {
+            <span class="badge badge-warning"><%= $hostgroup->{num_hosts_unreach} %></span>
+            % }
+            % if ($hostgroup->{num_hosts_down} ne "0") {
+            <span class="badge badge-error"><%= $hostgroup->{num_hosts_down} %></span>
+            % }
+          </td>
+          <td>
+            % if ($hostgroup->{num_services_crit} ne "0") {
+            <span class="badge badge-error"><%= $hostgroup->{num_services_crit} %></span>
+            % }
+            % if ($hostgroup->{num_services_warn} ne "0") {
+            <span class="badge badge-warning"><%= $hostgroup->{num_services_warn} %></span>
+            % }
+          <td>
+        </tr>
+        % }
+      </tbody>
+  </div>
+</div>
