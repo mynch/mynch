@@ -5,7 +5,7 @@
     <h2>Plugin problems</h2>
     <p>
       A list of services where the service check does not run
-      correctly. This needs to be fixed on the monitoring nodes.
+      correctly. This needs to be fixed on the monitoring servers.
     </p>
     <table class="table table-condensed">
       <thead>
