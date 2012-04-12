@@ -123,6 +123,23 @@ sub problem_data_nrpe {
     $self->stash( nrpe_hosts => \@sorted );
 }
 
+
+sub problem_data_plugins {
+    my $self = shift;
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ host_display_name display_name plugin_output };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: plugin_output ~ CRITICAL: Return code of .* is out of bounds\n";
+
+    my $results_ref = $ls->fetch( $query );
+
+    $self->stash( plugin_services => $results_ref );
+}
+
 sub hostgroup_summary {
     my $self = shift;
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
@@ -174,6 +191,7 @@ sub problem_page {
     $self->problem_data_munin;
     $self->problem_data_mysql;
     $self->problem_data_nrpe;
+    $self->problem_data_plugins;
 
     $self->render;
 }
