@@ -1,4 +1,31 @@
 * View
+** Settings
+
+*** Store variables in cookie
+
+**** DONE Add /settings
+
+**** DONE Store variable in session
+
+**** DONE View session
+
+**** TODO Edit session
+
+*** Setting for log cutoff
+
+    ...with "max" setting :)
+
+
+*** Use filter variables to show matching hostgroups
+
+
+**** Add "hostgroups" param to most controller actions
+
+     Do not retrieve more than we need.
+
+**** Group hostgroups according to setting
+
+     Pivot on view_group?  Add helper for this.
 
 ** Wallscreen
 
@@ -8,17 +35,17 @@
 
 *** Sections
 
-**** All services not in OK state
+**** DONE All services not in OK state
 
-     Abbreviate plugin output?  (Complete output on mouseover)
-
-**** Recent events
+**** DONE Recent events
 
      For SOFT state, change color to grey, and add 1/4, 2/4, etc...
 
-**** Graphs and diagrams
+**** TODO [#B] Graphs and diagrams
 
      Add eyecandy.
+
+**** TODO [#C] Abbreviate plugin output?  (Complete output on mouseover)
 
 ** Worker
 
