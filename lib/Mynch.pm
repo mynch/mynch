@@ -8,7 +8,6 @@ sub startup {
     my $self = shift;
 
     # Plugins
-    $self->plugin('PODRenderer');
     $self->plugin('Mynch::Helpers');
     $self->plugin('Config');
 
