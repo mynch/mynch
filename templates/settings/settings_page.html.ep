@@ -1,0 +1,12 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Settings</h2>
+      <pre>
+        <%= dumper $settings =%>
+      </pre>
+    </div>
+  </div>
+</div>

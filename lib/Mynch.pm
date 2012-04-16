@@ -32,6 +32,8 @@ sub startup {
     $r->route('/wallscreen/problems')
         ->to(controller => 'wallscreen', action => 'problem_page' );
 
+    $r->route('/settings')
+        ->to(controller => 'settings', action => 'settings_page' );
 }
 
 1;
