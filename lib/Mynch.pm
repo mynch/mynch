@@ -16,6 +16,16 @@ sub startup {
         $self->secret($self->config->{secret});
     }
 
+    # Read local plugins from configuration file
+    foreach my $plugin (@{ $self->config->{plugins} }) {
+        if ($plugin->{parameters}) {
+            $self->plugin($plugin->{name}, $plugin->{parameters});
+        }
+        else {
+            $self->plugin($plugin->{name});
+        }
+    }
+
     # Router
     my $r = $self->routes;
 
