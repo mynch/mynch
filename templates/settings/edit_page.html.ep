@@ -1,0 +1,54 @@
+% layout 'bootstrap', title 'Mynch';
+
+% if (flash 'message') {
+<div class="well">
+  <%= flash 'message' =%>
+</div>
+% }
+
+<div class="row-fluid">
+  <div class="span12">
+    <h2>Edit settings</h2>
+  </div>
+</div>
+<div class="row-fluid">
+  <div class="span6">
+    <form action="/settings/verify">
+      % if ($settings->{view}) {
+      % foreach my $set ( @{ $settings->{view} } ) {
+      <input name="1_label" type="text" class="span4" placeholder="label…" value="<%= $set->{label}%>"/>
+      <span class="help-inline">Label for a new set of host groups</span>
+      <input name="1_hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" value="<%= $set->{hostgroups}%>"/>
+      <span class="help-inline">A set of host groups to display for this label</span>
+      <hr>
+      % }
+      % }
+      % if (! $settings->{view} or scalar $settings->{view} lt 3) {
+      <input name="label" type="text" class="span4" placeholder="label…" />
+      <span class="help-inline">Label for a new set of host groups</span>
+      <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" />
+      <span class="help-inline">A set of host groups to display for this label</span>
+      <hr/>
+      <button type="submit" value="add" class="btn btn-success"><i class="icon icon-edit"></i>Add</button>
+      <span class="help-inline">Add set of hostgroups</span>
+      <hr>
+      % }
+      <button type="submit" value="save" class="btn btn-info"><i class="icon icon-edit"></i>Save</button>
+      <span class="help-inline">Save these settings, and return.</span>
+    </form>
+    <form action="/settings/clear">
+      <button type="submit" value="clear" class="btn btn-warning"><i class="icon icon-remove"></i>Clear</button>
+      <span class="help-inline">
+        Clear custom settings, and restore defaults.
+      </span>
+    </form>
+  </div>
+  <div class="span6">
+  </div>
+  <div class="span6">
+    <p>A dump of $settings</p>
+    <pre>
+      <%= dumper $settings =%>
+    </pre>
+  </div>
+</div>

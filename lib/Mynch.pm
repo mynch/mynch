@@ -43,6 +43,12 @@ sub startup {
 
     $r->route('/settings')
         ->to(controller => 'settings', action => 'settings_page' );
+    $r->route('/settings/edit')
+        ->to(controller => 'settings', action => 'edit_page' );
+    $r->route('/settings/verify')
+        ->to(controller => 'settings', action => 'verify_settings' );
+    $r->route('/settings/clear')
+        ->to(controller => 'settings', action => 'clear_settings' );
 }
 
 1;
