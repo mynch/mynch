@@ -38,9 +38,6 @@ sub startup {
     $r->route('/wallscreen/hostgroups')
         ->to(controller => 'wallscreen', action => 'hostgroup_summary' );
 
-    $r->route('/wallscreen/problems')
-        ->to(controller => 'wallscreen', action => 'problem_page' );
-
     $r->route('/settings')
         ->to(controller => 'settings', action => 'settings_page' );
     $r->route('/settings/edit')
@@ -53,6 +50,10 @@ sub startup {
         ->to(controller => 'settings', action => 'add_set' );
     $r->route('/settings/save')
         ->to(controller => 'settings', action => 'save_set' );
+
+    $r->route('/report/migration')
+        ->to(controller => 'reports', action => 'migration_report' );
+
 }
 
 1;
