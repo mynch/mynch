@@ -45,10 +45,14 @@ sub startup {
         ->to(controller => 'settings', action => 'settings_page' );
     $r->route('/settings/edit')
         ->to(controller => 'settings', action => 'edit_page' );
-    $r->route('/settings/verify')
-        ->to(controller => 'settings', action => 'verify_settings' );
     $r->route('/settings/clear')
         ->to(controller => 'settings', action => 'clear_settings' );
+    $r->route('/settings/delete')
+        ->to(controller => 'settings', action => 'delete_set' );
+    $r->route('/settings/add')
+        ->to(controller => 'settings', action => 'add_set' );
+    $r->route('/settings/save')
+        ->to(controller => 'settings', action => 'save_set' );
 }
 
 1;

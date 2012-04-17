@@ -26,6 +26,7 @@
       No settings.
     </div>
     % }
+    <hr/>
     <form action="/settings/edit">
       <button type="submit" value="add" class="btn btn-info"><i class="icon icon-edit"></i>Edit</button>
       <span class="help-inline">
