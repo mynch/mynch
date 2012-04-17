@@ -19,7 +19,7 @@
       <form action="/settings/save">
         <input type="hidden" name="set" value="<%= $i %>" />
         <input name="label" type="text" class="span4" placeholder="label…" value="<%= $set->{label}%>"/>
-        <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" value="<%= $set->{hostgroups}%>"/>
+        <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" value="<%= join(', ', @{ $set->{hostgroups} } ) %>"/>
         <br/>
         <button type="submit" value="save" class="btn btn-info"><i class="icon icon-edit"></i>Save</button>
       </form>
@@ -33,7 +33,8 @@
       <hr>
     </form>
     % if ( $i < 3 ) {
-    <form action="/settings/add">
+    <form action="/settings/save">
+      <input type="hidden" name="set" value="new" />
       <input name="label" type="text" class="span4" placeholder="label…" />
       <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" />
       <button type="submit" value="add" class="btn btn-success"><i class="icon icon-edit"></i>Add set</button>
