@@ -1,0 +1,16 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="row-fluid">
+  <h2>Reports</h2>
+  <p>A list of custom reports available in this instance of Mynch</p>
+</div>
+<div class="row-fluid">
+  % foreach my $report ( @{ $reports } ) {
+  <div class="span3">
+    <h3><a href="<%= $report->{route} %>"><%= $report->{name} %></a></h3>
+    <p>
+      <%= $report->{description} %>
+    </p>
+  </div>
+  % }
+</div>

@@ -32,6 +32,8 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li><a href="/wallscreen">Wallscreen</a></li>
+              <li><a href="/reports">Reports</a></li>
+              <li class="divider-vertical"></li>
               <li><a href="/wallscreen/hostgroups">Hostgroups</a></li>
               <li><a href="/wallscreen/status">Services</a></li>
               <li><a href="/wallscreen/log">Log</a></li>

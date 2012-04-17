@@ -1,7 +1,21 @@
-package Mynch::Wallscreen;
+package Mynch::Reports;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use List::MoreUtils qw{ uniq };
+
+sub index {
+    my $self = shift;
+    my $reports = [
+        {
+            name  => 'Icinga migration',
+            route => '/report/migration',
+            description => 'Work needed in order to migrate to Icinga from Nagios',
+        },
+    ];
+
+    $self->stash( reports => $reports );
+    $self->render;
+}
 
 sub migration_report {
     my $self = shift;
