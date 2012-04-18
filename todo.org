@@ -80,4 +80,31 @@
 
 * Test
 
-  eq_or_diff, to check data structures.  May produce long output.
+** Test::Deep
+
+   use Test::Deep.  Inherits Test::More ,same interface.
+
+#+BEGIN_SRC perl
+   # Load settings from $self->app->{session}->{view}
+
+   my $expected_template = array_each (
+     {
+       label      => ignore(),
+       hostgroups => array_each (
+         isa( 'String' ),
+	 re( qr/^[a-z0-9-]+$/ )
+       )
+     },
+   )
+   
+   cmp_deeply $settings, $expected_template
+     => "Settings look ok";
+#+END_SRC
+
+#+BEGIN_SRC perl
+     cmp_deeply $config_hostgroups, subsetof(@{ $live_hostgroups }) => "Hostgroups is a subset of the live set"
+#+END_SRC
+
+** eq_or_diff, to check data structures.  May produce long output.  (Shows complete diff)
+
+   
