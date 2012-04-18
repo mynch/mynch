@@ -59,18 +59,25 @@
 
 * Code
 
-** Quantum::Superposition
+** DONE Quantum::Superposition
    Adds "any" and "all" operators. Useful.
 
-** Sessions
+** DONE Sessions
    Store session data in signed cookie.
 
-** Add more sources
+** DONE Add more sources
 
-   Several icinga servers...  Will the data structures change?
+   Several icinga servers...
 
-** Ignore hostgroup, host, host+service
+
+** TODO Will the data structures change?
+
+** TODO Ignore hostgroup, host, host+service
 
    Until unignored?
 
    Until state changes.
+
+* Test
+
+  eq_or_diff, to check data structures.  May produce long output.
