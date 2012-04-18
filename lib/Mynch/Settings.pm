@@ -20,8 +20,6 @@ sub edit_page {
 sub save_set {
     my $self = shift;
 
-    $self->session->{settings}->{view} ||= [];
-
     my $set        = $self->param('set');
     my $label      = $self->param('label');
     my $hostgroups = $self->param('hostgroups');
@@ -34,8 +32,10 @@ sub save_set {
             hostgroups => $hostgroups_ref
         };
 
+	$self->session->{settings}->{view} ||= [];
+
         if ($set eq 'new') {
-            push( $self->session->{settings}->{view}, $set_data );
+            push( @{ $self->session->{settings}->{view} }, $set_data );
             $self->flash( message => 'Added set' );
         }
         else {
