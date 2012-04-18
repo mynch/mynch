@@ -80,6 +80,10 @@
 
 * Test
 
+** Test::Class
+
+   Good things
+
 ** Test::Deep
 
    use Test::Deep.  Inherits Test::More ,same interface.
@@ -105,6 +109,33 @@
      cmp_deeply $config_hostgroups, subsetof(@{ $live_hostgroups }) => "Hostgroups is a subset of the live set"
 #+END_SRC
 
-** eq_or_diff, to check data structures.  May produce long output.  (Shows complete diff)
 
+** Test::Effects
+
+   Like Test::Trap, but with defaults for the last four. Subtests
+   automatically.  VERBOSE available.
    
+#+BEGIN_SRC perl
+   effects_ok{ show_sequence( '1..10 x 2' ) }
+             {
+	       'return' => 5,
+	       'stdout  => "1, 2, 3, 4, 5\n",
+             }
+#+END_SRC
+
+
+** Test::Trap
+
+#+BEGIN_SRC perl
+   scalar trap { show_sequence( '1..10 x 2' ) };
+
+# Test how? Test what?    , Expected value , Description
+# ========= ==========    , ============== , ======================
+  is_deeply $trap->return , [5]            , 'Returned as expected';
+  is        $trap->stdout , q{}            , 'No output to STDOUT';
+  is        $trap->stderr , q{}            , 'No output to STDERR';
+  is_deeply $trap->warn   , []             , 'No warnings';
+  is        $trap->die    , undef          , 'No exceptions';
+  is        $trap->exit   , undef          , 'Did not exit()';
+# ...
+#+END_SRC
