@@ -1,13 +1,8 @@
 # -*- perl -*-
+use lib 't/tests';
 
-use Mojo::Base -strict;
+# XXX: Change to Test::Class::List
 
-use Test::More tests => 3;
-use Test::Mojo;
+use Mynch::Reports::Tests;
 
-use_ok 'Mynch';
-
-my $t = Test::Mojo->new('Mynch');
-
-$t->get_ok('/report/migration')
-    ->status_is(200);
+Test::Class->runtests();
