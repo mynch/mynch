@@ -2,6 +2,7 @@ package Mynch::Livestatus;
 use Mojo::Base -base;
 use Monitoring::Livestatus;
 use Method::Signatures;
+use Contextual::Return;
 
 method connect {
     my $config_ref = $self->{config};
@@ -17,9 +18,8 @@ method fetch( Str $query) {
 
     my $results_ref = $conn->selectall_arrayref($query);
 
-    if ($Monitoring::Livestatus::ErrorCode) {
-        croak($Monitoring::Livestatus::ErrorMessage);
-    }
+    return FAIL { $Monitoring::Livestatus::ErrorMessage }
+      if ($Monitoring::Livestatus::ErrorCode);
     return $results_ref;
 }
 
