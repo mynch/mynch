@@ -2,9 +2,9 @@ package Mynch::Reports;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use List::MoreUtils qw{ uniq };
+use Method::Signatures;
 
-sub index {
-    my $self = shift;
+method index {
     my $reports = [
         {
             name  => 'Icinga migration',
@@ -17,9 +17,7 @@ sub index {
     $self->render;
 }
 
-sub migration_report {
-    my $self = shift;
-
+method migration_report {
     $self->migration_data_munin;
     $self->migration_data_mysql;
     $self->migration_data_nrpe;
@@ -28,8 +26,7 @@ sub migration_report {
     $self->render;
 }
 
-sub migration_data_munin {
-    my $self = shift;
+method migration_data_munin {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ hostgroup_name };
@@ -48,8 +45,7 @@ sub migration_data_munin {
     $self->stash( munin_hostgroups => \@sorted );
 }
 
-sub migration_data_mysql {
-    my $self = shift;
+method migration_data_mysql {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ host_display_name display_name };
@@ -65,8 +61,7 @@ sub migration_data_mysql {
     $self->stash( mysql_services => \@sorted );
 }
 
-sub migration_data_nrpe {
-    my $self = shift;
+method migration_data_nrpe {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ host_display_name };
@@ -83,8 +78,7 @@ sub migration_data_nrpe {
     $self->stash( nrpe_hosts => \@sorted );
 }
 
-sub migration_data_plugins {
-    my $self = shift;
+method migration_data_plugins {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ host_display_name display_name plugin_output };

@@ -1,20 +1,18 @@
 package Mynch::Livestatus;
 use Mojo::Base -base;
 use Monitoring::Livestatus;
+use Method::Signatures;
 
-sub connect {
-    my $self = shift;
+method connect {
     my $config_ref = $self->{config};
-    my %config = %{ $config_ref };
+    my %config     = %{$config_ref};
 
-    my $conn = Monitoring::Livestatus->new( %config );
+    my $conn = Monitoring::Livestatus->new(%config);
 
     return $conn;
 }
 
-sub fetch {
-    my $self  = shift;
-    my $query = shift;
+method fetch( Str $query) {
     my $conn = $self->connect;
 
     my $results_ref = $conn->selectall_arrayref($query);
@@ -25,11 +23,7 @@ sub fetch {
     return $results_ref;
 }
 
-sub massage {
-    my $self        = shift;
-    my $src_ref     = shift;
-    my $columns_ref = shift;
-
+method massage( ArrayRef $src_ref, ArrayRef $columns_ref) {
     my @src     = @$src_ref;
     my @columns = @$columns_ref;
     my @dst;

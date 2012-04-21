@@ -2,16 +2,14 @@ package Mynch::Wallscreen;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use List::MoreUtils qw{ uniq };
+use Method::Signatures;
 
-sub log_page {
-    my $self = shift;
-
+method log_page {
     $self->log_data;
     $self->render;
 }
 
-sub log_data {
-    my $self = shift;
+method log_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my $since = time() - 600;    # 10 minutes of log data
@@ -33,8 +31,7 @@ sub log_data {
     $self->stash( log_entries => $data_ref );
 }
 
-sub status_data {
-    my $self = shift;
+method status_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw{ host_groups host_name display_name state
@@ -67,8 +64,7 @@ sub status_data {
     $self->stash( services => $status_ref );
 }
 
-sub hostgroup_summary {
-    my $self = shift;
+method hostgroup_summary {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw { name num_hosts_down num_hosts_unreach
@@ -89,23 +85,17 @@ sub hostgroup_summary {
 
 }
 
-sub hostgroup_status_page {
-    my $self = shift;
-
+method hostgroup_status_page {
     $self->hostgroup_summary;
     $self->render;
 }
 
-sub status_page {
-    my $self = shift;
-
+method status_page {
     $self->status_data;
     $self->render;
 }
 
-sub main_page {
-    my $self = shift;
-
+method main_page {
     $self->status_data;
     $self->log_data;
     $self->hostgroup_summary;

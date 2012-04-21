@@ -2,6 +2,7 @@ package Mynch::Settings;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use Quantum::Superpositions;
+use Method::Signatures;
 
 sub settings_page {
     my $self = shift;
