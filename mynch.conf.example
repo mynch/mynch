@@ -1,0 +1,33 @@
+# -*- perl -*-
+# Mynch configuration
+#
+# Edit this file, and save as "mynch.conf"
+#
+# Configuration format, see Mojolicious::Plugin::Config
+#
+# Keys:
+#
+# "ml": Parameters for Monitoring::Livestatus->new()
+#
+# "secret": Used by mojolicious to sign the session cookie
+#
+# "plugins": Used to load other mojo plugins.
+
+{
+    secret => '7f007b50-e7ed-49be-884a-6f1924e69515',
+
+    plugins => [ { name => 'PODRenderer', } ],
+
+    ml => {
+        peer => [
+            {
+                name => 'local mk-livestatus socket',
+                peer => '/var/lib/icinga/rw/livestatus'
+            },
+            {
+                name => 'remote mk-livestatus socket',
+                peer => 'nagios.example.org:6557'
+            },
+        ]
+    },
+};
