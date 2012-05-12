@@ -69,6 +69,11 @@
      - Submit result
 
 * Code
+** TODO Remove non-distributable code
+   Example: "os updates" filters
+
+** TODO Make a "Reports" plugin
+   The "migration" report is highly site specific.
 
 ** DONE Quantum::Superposition
    Adds "any" and "all" operators. Useful.
