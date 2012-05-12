@@ -16,14 +16,14 @@
       % my $i = 0;
       % if ($settings->{view}) {
       % foreach my $set ( @{ $settings->{view} } ) {
-      <form action="/settings/save">
+      <form action="/settings/save_set">
         <input type="hidden" name="set" value="<%= $i %>" />
         <input name="label" type="text" class="span4" placeholder="label…" value="<%= $set->{label}%>"/>
         <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" value="<%= join(', ', @{ $set->{hostgroups} } ) %>"/>
         <br/>
         <button type="submit" value="save" class="btn btn-info"><i class="icon icon-edit"></i>Save</button>
       </form>
-      <form action="/settings/delete">
+      <form action="/settings/delete_set">
         <input type="hidden" name="set" value="<%= $i %>" />
         <button type="submit" class="btn btn-warning"><i class="icon icon-remove"></i>Delete set</button>
       </form>
@@ -33,7 +33,7 @@
       <hr>
     </form>
     % if ( $i < 3 ) {
-    <form action="/settings/save">
+    <form action="/settings/save_set">
       <input type="hidden" name="set" value="new" />
       <input name="label" type="text" class="span4" placeholder="label…" />
       <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" />
@@ -41,7 +41,7 @@
       <hr>
     </form>
     % }
-    <form action="/settings/clear">
+    <form action="/settings/clear_settings">
       <button type="submit" value="clear" class="btn btn-warning"><i class="icon icon-remove"></i>Clear</button>
       <span class="help-inline">
         Clear custom settings, and restore defaults.

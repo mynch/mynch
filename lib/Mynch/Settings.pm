@@ -11,7 +11,7 @@ sub settings_page {
     $self->render;
 }
 
-sub edit_page {
+sub edit {
     my $self = shift;
 
     $self->stash( settings => $self->session->{settings} );
