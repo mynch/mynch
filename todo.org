@@ -1,23 +1,11 @@
 * View
 ** Settings
 
-*** Store variables in cookie
-
-**** DONE Add /settings
-
-**** DONE Store variable in session
-
-**** DONE View session
-
-**** TODO Edit session
-
 *** Setting for log cutoff
 
     ...with "max" setting :)
 
-
 *** Use filter variables to show matching hostgroups
-
 
 **** Add "hostgroups" param to most controller actions
 
@@ -55,7 +43,30 @@
     Primary, Secondary, Team, Other
 
 *** Actions
-    Ignore, Acknowledge
+
+**** Interface
+
+     - Go to nagios / icinga page for this host
+
+     - Ignore service / host / hostgroup
+
+       - Forever
+
+       - Until OK
+
+       - until state change
+
+       - until comment change
+
+**** Integration with icinga / nagios
+
+     - Comment
+
+     - Acknowledge
+
+     - Recheck
+
+     - Submit result
 
 * Code
 
@@ -96,11 +107,11 @@
        label      => ignore(),
        hostgroups => array_each (
          isa( 'String' ),
-	 re( qr/^[a-z0-9-]+$/ )
+         re( qr/^[a-z0-9-]+$/ )
        )
      },
    )
-   
+
    cmp_deeply $settings, $expected_template
      => "Settings look ok";
 #+END_SRC
@@ -114,12 +125,12 @@
 
    Like Test::Trap, but with defaults for the last four. Subtests
    automatically.  VERBOSE available.
-   
+
 #+BEGIN_SRC perl
    effects_ok{ show_sequence( '1..10 x 2' ) }
              {
-	       'return' => 5,
-	       'stdout  => "1, 2, 3, 4, 5\n",
+               'return' => 5,
+               'stdout  => "1, 2, 3, 4, 5\n",
              }
 #+END_SRC
 
