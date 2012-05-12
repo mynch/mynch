@@ -4,7 +4,7 @@ use Mynch::Livestatus;
 use List::MoreUtils qw{ uniq };
 use Method::Signatures;
 
-method log_page {
+method log {
     $self->log_data;
     $self->render;
 }
@@ -85,12 +85,12 @@ method hostgroup_summary {
 
 }
 
-method hostgroup_status_page {
+method hostgroups {
     $self->hostgroup_summary;
     $self->render;
 }
 
-method status_page {
+method status {
     $self->status_data;
     $self->render;
 }

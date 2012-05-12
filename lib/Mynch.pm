@@ -28,15 +28,10 @@ sub startup {
     # Router
     my $r = $self->routes;
 
-    $r->route('/wallscreen')
-        ->to(controller => 'wallscreen', action => 'main_page' );
-    $r->route('/wallscreen/status')
-        ->to(controller => 'wallscreen', action => 'status_page' );
-    $r->route('/wallscreen/log')
-        ->to(controller => 'wallscreen', action => 'log_page' );
-
-    $r->route('/wallscreen/hostgroups')
-        ->to(controller => 'wallscreen', action => 'hostgroup_summary' );
+    $r->route('/wallscreen/:action')->to(
+        controller => 'wallscreen',
+        action     => 'main_page',
+    );
 
     $r->route('/settings')
         ->to(controller => 'settings', action => 'settings_page' );
