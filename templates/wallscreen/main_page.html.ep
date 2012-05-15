@@ -1,4 +1,7 @@
 % layout 'bootstrap', title 'Mynch';
+% content_for header => begin
+<meta http-equiv="Refresh" content="30" />
+% end
 
 <div class="container-fluid">
   <div class="row-fluid">
