@@ -28,6 +28,8 @@ sub startup {
     # Router
     my $r = $self->routes;
 
+    $r->route('/')->to( controller => 'wallscreen', action => 'main_page' );
+
     $r->route('/wallscreen/:action')->to(
         controller => 'wallscreen',
         action     => 'main_page',
