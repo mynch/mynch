@@ -35,6 +35,9 @@ sub startup {
         action     => 'main_page',
     );
 
+    $r->route('/wallscreen/hostgroup/:show_hostgroups')
+        ->to( controller => 'wallscreen', action => 'main_page', show_hostgroups => '' );
+
     $r->route('/settings/:action')->to(
         controller => 'settings',
         action     => 'settings_page',

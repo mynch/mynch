@@ -23,6 +23,7 @@ method log_data {
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: time >= $since\n";
     $query .= "Filter: type = SERVICE ALERT\n";
+    $query .= $self->hostgroup_filter(query_key => 'current_host_groups', query_operator => '>=');
 
     my $results_ref = $ls->fetch( $query );
 
@@ -56,7 +57,7 @@ method status_data {
     $query .= "Filter: display_name != Pending packages\n";
     $query .= "Filter: display_name != check apt\n";
     $query .= "Filter: display_name != Yum\n";
-
+    $query .= $self->hostgroup_filter(query_key => 'host_groups', query_operator => '>=');
     my $results_ref = $ls->fetch( $query );
 
     my $status_ref = $ls->massage($results_ref, \@columns);
@@ -74,10 +75,13 @@ method hostgroup_summary {
     my $query;
     $query .= "GET hostgroups\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
-    $query .= "Filter: hostgroup_name != x-old-nagios\n";
     $query .= "Filter: num_services_crit > 0\n";
     $query .= "Filter: num_hosts_down > 0\n";
     $query .= "Or: 2\n";
+    if (exists $self->stash->{show_hostgroups}) {
+        $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
+        $query .= "And: 2\n";
+    }
 
     my $results_ref = $ls->fetch( $query );
     my $hostgroup_status_ref = $ls->massage($results_ref, \@columns);
@@ -102,4 +106,17 @@ method main_page {
     $self->render;
 }
 
+method hostgroup_filter(Str :$query_key, Str :$query_operator) {
+    my $query;
+    if (exists $self->stash->{show_hostgroups}) {
+        my @hostgroups = split(/,/, $self->stash->{show_hostgroups});
+        foreach my $hostgroup (@hostgroups) {
+            $query .= sprintf("Filter: %s %s %s\n", $query_key, $query_operator, $hostgroup);
+        }
+        if (scalar @hostgroups > 1) {
+            $query .= sprintf("Or: %d\n", scalar @hostgroups);
+        }
+    }
+    return $query;
+}
 1;
