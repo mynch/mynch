@@ -11,17 +11,17 @@ sub startup {
     $self->plugin('Mynch::Helpers');
     $self->plugin('Config');
 
-    if ($self->config->{secret}) {
-        $self->secret($self->config->{secret});
+    if ( $self->config->{secret} ) {
+        $self->secret( $self->config->{secret} );
     }
 
     # Read local plugins from configuration file
-    foreach my $plugin (@{ $self->config->{plugins} }) {
-        if ($plugin->{parameters}) {
-            $self->plugin($plugin->{name}, $plugin->{parameters});
+    foreach my $plugin ( @{ $self->config->{plugins} } ) {
+        if ( $plugin->{parameters} ) {
+            $self->plugin( $plugin->{name}, $plugin->{parameters} );
         }
         else {
-            $self->plugin($plugin->{name});
+            $self->plugin( $plugin->{name} );
         }
     }
 
@@ -38,10 +38,9 @@ sub startup {
         action     => 'settings_page',
     );
 
-    $r->route('/reports')
-        ->to(controller => 'reports', action => 'index');
+    $r->route('/reports')->to( controller => 'reports', action => 'index' );
     $r->route('/report/migration')
-        ->to(controller => 'reports', action => 'migration_report' );
+        ->to( controller => 'reports', action => 'migration_report' );
 
 }
 
