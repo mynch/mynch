@@ -107,7 +107,7 @@ method main_page {
 }
 
 method hostgroup_filter(Str :$query_key, Str :$query_operator) {
-    my $query;
+    my $query = '';
     if (exists $self->stash->{show_hostgroups}) {
         my @hostgroups = split(/,/, $self->stash->{show_hostgroups});
         foreach my $hostgroup (@hostgroups) {
