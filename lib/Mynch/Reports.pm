@@ -22,8 +22,25 @@ method migration_report {
     $self->migration_data_mysql;
     $self->migration_data_nrpe;
     $self->migration_data_plugins;
+    $self->migration_data_oldnagios;
 
     $self->render;
+}
+
+method migration_data_oldnagios {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ display_name };
+    my $query;
+    $query .= "GET hosts\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: groups >= x-old-nagios\n";
+
+    my $results_ref = $ls->fetch($query);
+
+    my @hosts = map { $_->[0] } @{ $results_ref };
+
+    $self->stash( oldnagios_hosts => \@hosts );
 }
 
 method migration_data_munin {
@@ -87,6 +104,9 @@ method migration_data_plugins {
     $query .= "GET services\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: plugin_output ~ CRITICAL: Return code of .* is out of bounds\n";
+    $query .= "Filter: plugin_output ~ No such file or directory\n";
+    $query .= "Filter: plugin_output ~ error executing command\n";
+    $query .= "Or: 3\n";
 
     my $results_ref = $ls->fetch( $query );
 

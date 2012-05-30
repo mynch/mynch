@@ -62,6 +62,34 @@
       </tbody>
     </table>
   </div>
+
+  <div class="span4">
+    <h2>Check via old nagios</h2>
+    <p>
+      A list of hosts where the checks are performed from the old
+      nagios servers, due to IP access lists, VPN's or other reasons.
+      These needs to grant access for the new monitoring network. When
+      that is OK, remove the host from the "x-old-nagios" hostgroup.
+    </p>
+
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <th>host</th>
+        </tr>
+      </thead>
+      <tbody>
+        % foreach my $host ( @{ $oldnagios_hosts } ) {
+        <tr>
+          <td>
+            %= $host
+          </td>
+        </tr>
+        % }
+      </tbody>
+    </table>
+  </div>
+
   <div class="span4">
     <h2>MySQL authentication</h2>
     <p>
