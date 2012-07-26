@@ -29,9 +29,9 @@ method massage( ArrayRef $src_ref, ArrayRef $columns_ref) {
     my @dst;
 
     foreach (@src) {
-        my %tmp;
-        @tmp{@columns} = @$_;
-        push( @dst, {%tmp} );
+      my %tmp;
+      @tmp{@columns} = @$_;
+      push( @dst, {%tmp} );
     }
 
     return \@dst;

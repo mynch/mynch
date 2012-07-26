@@ -57,12 +57,24 @@ method status_data {
     $query .= "Filter: display_name != Pending packages\n";
     $query .= "Filter: display_name != check apt\n";
     $query .= "Filter: display_name != Yum\n";
+    $query .= "Filter: display_name != Package updates\n";
     $query .= $self->hostgroup_filter(query_key => 'host_groups', query_operator => '>=');
     my $results_ref = $ls->fetch( $query );
 
-    my $status_ref = $ls->massage($results_ref, \@columns);
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+    my @status = ();
 
-    $self->stash( services => $status_ref );
+    # Remove duplicates
+    my %seen = ();
+    for my $services ( @{ $tmp_status_ref }) {
+      my $key = $services->{ 'host_name' } . $services->{ 'display_name' };
+      if ( ! $seen{ $key }) {
+        push @status, $services;
+       $seen{ $key } = 1;
+      }
+    }
+
+    $self->stash( services => \@status );
 }
 
 method hostgroup_summary {
