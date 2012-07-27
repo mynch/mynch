@@ -6,7 +6,9 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
     VERSION   => '0.01',
     PREREQ_PM => {
+        'Contextual::Return'      => '0',
         'List::MoreUtils'         => '0',
+	'Method::Signatures'      => '20110923.1726',
         'Mojolicious'             => '2.50',
         'Monitoring::Livestatus'  => '0',
         'Quantum::Superpositions' => '0',
