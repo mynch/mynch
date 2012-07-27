@@ -1,0 +1,51 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Current problems</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>host</th>
+            <th>service</th>
+            <th>duration</th>
+            <th>notification</th>
+            <th>output</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $service ( servicesbyhostgroup_sort $services ) {
+          % my $label_items = {
+          %   state        => $service->{state},
+          %   state_type   => $service->{state_type},
+          %   attempt      => $service->{current_attempt},
+          %   max_attempts => $service->{max_check_attempts},
+          % };
+          <tr>
+            <td>
+              %== service_state_label ( $label_items )
+            </td>
+            <td>
+              %= $service->{host_name}
+            </td>
+            <td>
+              %= $service->{display_name}
+            </td>
+            <td>
+              %= duration $service->{last_hard_state_change}
+            </td>
+            <td>
+              %= duration $service->{last_notification}
+            </td>
+            <td>
+              %= $service->{plugin_output}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
