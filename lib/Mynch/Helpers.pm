@@ -146,7 +146,7 @@ sub register {
             my $html =
   '<button class="btn-mini" data-loading-text="rechecking..." '
 . "data-host=\"$host\" data-service=\"$service\" "
-. 'type="submit" name="submit" value="Recheck"><i class="icon-repeat"></i></button>';
+. 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
     );
@@ -160,7 +160,7 @@ sub register {
             my $html =
   '<button class="btn-mini" data-loading-text="acking..." '
 . "data-host=\"$host\" data-service=\"$service\" "
-. 'type="submit" name="submit" value="Ack"><i class="icon-ok"></i></button>';
+. 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             return $html;
         }
     );
