@@ -45,6 +45,19 @@
               %= $service->{display_name}
             </td>
           </tr>
+          <tr>
+          <td>
+              <form action="/dashboard/dostuff" method="POST">
+                %= hidden_field 'host' => $service->{host_name}
+                %= hidden_field 'service' => $service->{display_name}
+                %== button_acknowledge($service->{host_name}, $service->{display_name})
+                %== button_recheck($service->{host_name}, $service->{display_name})
+              </form>
+            </td>
+            <td colspan=3 style="max-width: 500px">
+              %= $service->{plugin_output}
+            </td> 
+          </tr>
           % }
         </tbody>
       </table>

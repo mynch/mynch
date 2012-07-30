@@ -140,10 +140,13 @@ sub register {
     $app->helper(
         button_recheck => sub {
             my $self  = shift;
-            my $state = shift;
+            my $host = shift;
+            my $service = shift;
 
             my $html =
-'<button class="btn-mini" type ="submit"><i class="icon-repeat"></i></button>';
+  '<button class="btn-mini" data-loading-text="rechecking..." '
+. "data-host=\"$host\" data-service=\"$service\" "
+. 'type="submit" name="submit" value="Recheck"><i class="icon-repeat"></i></button>';
             return $html;
         }
     );
@@ -151,10 +154,13 @@ sub register {
     $app->helper(
         button_acknowledge => sub {
             my $self  = shift;
-            my $state = shift;
+            my $host = shift;
+            my $service = shift;
 
             my $html =
-'<button class="btn-mini" type ="submit"><i class="icon-ok"></i></button>';
+  '<button class="btn-mini" data-loading-text="acking..." '
+. "data-host=\"$host\" data-service=\"$service\" "
+. 'type="submit" name="submit" value="Ack"><i class="icon-ok"></i></button>';
             return $html;
         }
     );
