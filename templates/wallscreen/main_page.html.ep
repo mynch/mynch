@@ -119,12 +119,12 @@
               <span class="badge badge-warning"><%= $hostgroup->{num_hosts_unreach} %></span>
               % }
               % if ($hostgroup->{num_hosts_down} ne "0") {
-              <span class="badge badge-error"><%= $hostgroup->{num_hosts_down} %></span>
+              <span class="badge badge-important"><%= $hostgroup->{num_hosts_down} %></span>
               % }
             </td>
             <td>
               % if ($hostgroup->{num_services_crit} ne "0") {
-              <span class="badge badge-error"><%= $hostgroup->{num_services_crit} %></span>
+              <span class="badge badge-important"><%= $hostgroup->{num_services_crit} %></span>
               % }
               % if ($hostgroup->{num_services_warn} ne "0") {
               <span class="badge badge-warning"><%= $hostgroup->{num_services_warn} %></span>
