@@ -101,6 +101,32 @@ method hostgroup_summary {
 
 }
 
+sub dostuff {
+    my $self = shift;
+
+    my $host       = $self->param('host');
+    my $service    = $self->param('service');
+    my $submit     = $self->param('submit');
+    my $referrer   = $self->req->headers->referrer;
+
+    my $notify     = 1; # FIXME: adjustable
+    my $nick       = "vaktsmurfen"; # FIXME: grab from apache auth
+
+    my $now        = time();
+
+    if ($host && $service && $submit) {
+      my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+      if ($submit eq "Ack") {
+        $ls->send_commands("ACKNOWLEDGE_SVC_PROBLEM;$host;$service;1;$notify;1;$nick;Ack.");
+      }
+      elsif ($submit eq "Recheck") {
+        $ls->send_commands("SCHEDULE_FORCED_SVC_CHECK;$host;$service;$now");
+      }
+    }
+
+    $self->redirect_to($referrer);
+}
+
 method hostgroups {
     $self->hostgroup_summary;
     $self->render;
