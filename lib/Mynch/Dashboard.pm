@@ -110,7 +110,7 @@ sub dostuff {
     my $referrer   = $self->req->headers->referrer;
 
     my $notify     = 1; # FIXME: adjustable
-    my $nick       = "vaktsmurfen"; # FIXME: grab from apache auth
+    my $nick       = $ENV{'REMOTE_USER'} || "vaktsmurfen";
 
     my $now        = time();
 
