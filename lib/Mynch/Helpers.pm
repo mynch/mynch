@@ -1,6 +1,7 @@
 package Mynch::Helpers;
 
 use Time::Duration;
+use Digest::SHA1  qw(sha1_hex);
 
 use strict;
 use warnings;
@@ -140,10 +141,14 @@ sub register {
     $app->helper(
         button_recheck => sub {
             my $self  = shift;
-            my $state = shift;
+            my $host = shift;
+            my $service = shift;
+            my $id = sha1_hex($host . $service . "Recheck");
 
             my $html =
-'<button class="btn-mini" type ="submit"><i class="icon-repeat"></i></button>';
+  '<button class="btn btn-mini" data-loading-text="rechecking..." id="' . $id . '" '
+. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Recheck", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
     );
@@ -151,10 +156,19 @@ sub register {
     $app->helper(
         button_acknowledge => sub {
             my $self  = shift;
-            my $state = shift;
+            my $host = shift;
+            my $service = shift;
+            my $acknowledged = shift;
+            my $class = "btn btn-mini";
+            my $extraattr = "";
+            my $id = sha1_hex($host . $service . "Ack");
+
+            if ($acknowledged == 1) { $class .= " btn-success"; $extraattr = "disabled "; }
 
             my $html =
-'<button class="btn-mini" type ="submit"><i class="icon-ok"></i></button>';
+  '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr . 'id="' . $id . '" ' 
+. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Ack", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             return $html;
         }
     );

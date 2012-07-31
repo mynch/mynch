@@ -23,6 +23,17 @@ method fetch( Str $query) {
     return $results_ref;
 }
 
+method send_commands( Str $commands) {
+    my $conn = $self->connect;
+
+    my @messages = split( /\n/, $commands );
+    foreach my $line (@messages) {
+        my $command = sprintf( "COMMAND [%d] %s\n", time(), $line );
+        $conn->do($command);
+    }
+    return;
+}
+
 method massage( ArrayRef $src_ref, ArrayRef $columns_ref) {
     my @src     = @$src_ref;
     my @columns = @$columns_ref;
