@@ -17,6 +17,7 @@
         <thead>
           <tr>
             <th>state</th>
+            <th>actions</th>
             <th>duration</th>
             <th>host</th>
             <th>service</th>
@@ -34,9 +35,16 @@
             <td>
               %== service_state_label ( $label_items )
             </td>
+            <td class="action">
+              <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+                %= hidden_field 'host' => $service->{host_name}
+                %= hidden_field 'service' => $service->{display_name}
+                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
+                %== button_recheck($service->{host_name}, $service->{display_name})
+              </form>
+            </td>
             <td>
               %= duration $service->{last_hard_state_change}
-              %= duration $service->{last_notification}
             </td>
             <td>
               %= $service->{host_name}
@@ -46,15 +54,8 @@
             </td>
           </tr>
           <tr>
-          <td>
-              <form action="/dashboard/dostuff" autocomplete="off" method="POST">
-                %= hidden_field 'host' => $service->{host_name}
-                %= hidden_field 'service' => $service->{display_name}
-                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
-                %== button_recheck($service->{host_name}, $service->{display_name})
-              </form>
-            </td>
-            <td colspan=3 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
+            <td>&nbsp;</td>
+            <td colspan=4 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
               %= $service->{plugin_output}
             </td> 
           </tr>
