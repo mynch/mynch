@@ -145,6 +145,7 @@ sub register {
 
             my $html =
   '<button class="btn btn-mini" data-loading-text="rechecking..." '
+. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Recheck" } );\' '
 . 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
@@ -163,6 +164,7 @@ sub register {
 
             my $html =
   '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr
+. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Ack" } );\' '
 . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             return $html;
         }
