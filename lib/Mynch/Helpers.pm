@@ -145,7 +145,6 @@ sub register {
 
             my $html =
   '<button class="btn btn-mini" data-loading-text="rechecking..." '
-. "data-host=\"$host\" data-service=\"$service\" "
 . 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
@@ -156,10 +155,14 @@ sub register {
             my $self  = shift;
             my $host = shift;
             my $service = shift;
+            my $acknowledged = shift;
+            my $class = "btn btn-mini";
+            my $extraattr = "";
+
+            if ($acknowledged == 1) { $class .= " btn-success"; $extraattr = "disabled "; }
 
             my $html =
-  '<button class="btn btn-mini" data-loading-text="acking..." '
-. "data-host=\"$host\" data-service=\"$service\" "
+  '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr
 . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             return $html;
         }
