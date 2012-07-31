@@ -39,7 +39,7 @@ method status_data {
            state_type acknowledged downtimes last_state_change
            last_hard_state_change last_check next_check
            last_notification current_attempt max_check_attempts
-           plugin_output };
+           plugin_output long_plugin_output };
 
     my $query;
     $query .= "GET servicesbyhostgroup\n";

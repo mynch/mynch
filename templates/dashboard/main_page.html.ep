@@ -54,7 +54,7 @@
                 %== button_recheck($service->{host_name}, $service->{display_name})
               </form>
             </td>
-            <td colspan=3 style="max-width: 500px">
+            <td colspan=3 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
               %= $service->{plugin_output}
             </td> 
           </tr>
