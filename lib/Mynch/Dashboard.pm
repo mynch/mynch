@@ -1,6 +1,7 @@
 package Mynch::Dashboard;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
+use Mynch::Config;
 use List::MoreUtils qw{ uniq };
 use Method::Signatures;
 
@@ -45,19 +46,7 @@ method status_data {
     $query .= "GET servicesbyhostgroup\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: state != 0\n";
-    $query .= "Filter: plugin_output != UNKNOWN: No current data from munin\n";
-    $query .= "Filter: display_name != Puppet last update\n";
-    $query .= "Filter: display_name != Puppet pending\n";
-    $query .= "Filter: display_name != Puppet Pending\n";
-    $query .= "Filter: display_name != Puppet\n";
-    $query .= "Filter: display_name != Pending updates\n";
-    $query .= "Filter: display_name != Pending OS Updates\n";
-    $query .= "Filter: display_name != apt updates\n";
-    $query .= "Filter: display_name != pending packages\n";
-    $query .= "Filter: display_name != Pending packages\n";
-    $query .= "Filter: display_name != check apt\n";
-    $query .= "Filter: display_name != Yum\n";
-    $query .= "Filter: display_name != Package updates\n";
+    $query .= Mynch::Config->build_filter($self->stash->{config}, "service-noise");
     $query .= $self->hostgroup_filter(query_key => 'host_groups', query_operator => '>=');
     my $results_ref = $ls->fetch( $query );
 

@@ -12,11 +12,20 @@
 # "secret": Used by mojolicious to sign the session cookie
 #
 # "plugins": Used to load other mojo plugins.
+#
+# "filters": Suppression filters for various screens, 'service-noise' suppresses noisy services in wallscreen and dashboard
 
 {
     secret => '7f007b50-e7ed-49be-884a-6f1924e69515',
 
     plugins => [ { name => 'PODRenderer', } ],
+
+    filters => {
+        'service-noise' => [
+            { column => 'plugin_output', output => 'UNKNOWN: Out to lunch, no current data' },
+            { column => 'display_name', output => 'Noisy non-critical service check' },
+        ]
+    },
 
     ml => {
         peer => [
