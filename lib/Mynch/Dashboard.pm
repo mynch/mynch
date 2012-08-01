@@ -33,6 +33,42 @@ method log_data {
     $self->stash( log_entries => $data_ref );
 }
 
+method host_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ accept_passive_checks acknowledged acknowledgement_type action_url action_url_expanded active_checks_enabled address alias check_command check_flapping_recovery_notification check_freshness check_interval check_options check_period check_type checks_enabled childs comments comments_with_info contact_groups contacts current_attempt current_notification_number custom_variable_names custom_variable_values custom_variables display_name downtimes downtimes_with_info event_handler event_handler_enabled execution_time filename first_notification_delay flap_detection_enabled groups hard_state has_been_checked high_flap_threshold icon_image icon_image_alt icon_image_expanded in_check_period in_notification_period initial_state is_executing is_flapping last_check last_hard_state last_hard_state_change last_notification last_state last_state_change last_time_down last_time_unreachable last_time_up latency long_plugin_output low_flap_threshold max_check_attempts modified_attributes modified_attributes_list name next_check next_notification no_more_notifications notes notes_expanded notes_url notes_url_expanded notification_interval notification_period notifications_enabled num_services num_services_crit num_services_hard_crit num_services_hard_ok num_services_hard_unknown num_services_hard_warn num_services_ok num_services_pending num_services_unknown num_services_warn obsess_over_host parents pending_flex_downtime percent_state_change perf_data plugin_output pnpgraph_present process_performance_data retry_interval scheduled_downtime_depth state state_type statusmap_image total_services worst_service_hard_state worst_service_state };
+
+    my $query;
+    $query .= "GET hosts\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: name =~ " . $self->stash->{show_host} . "\n";
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( host => $tmp_status_ref );
+}
+
+method host_service_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ host_name display_name state
+           state_type acknowledged downtimes last_state_change
+           last_hard_state_change last_check next_check
+           last_notification current_attempt max_check_attempts
+           plugin_output long_plugin_output };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( host_services => $tmp_status_ref );
+}
+
 method status_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -114,6 +150,12 @@ sub dostuff {
     }
 
     $self->redirect_to($referrer);
+}
+
+method host {
+    $self->host_data;
+    $self->host_service_data;
+    $self->render;
 }
 
 method hostgroups {

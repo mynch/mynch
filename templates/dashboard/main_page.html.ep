@@ -47,7 +47,7 @@
               %= duration $service->{last_hard_state_change}
             </td>
             <td>
-              %= $service->{host_name}
+              <a href="/dashboard/host/<%= $service->{host_name} %>"><%= $service->{host_name} %></a>
             </td>
             <td>
               %= $service->{display_name}

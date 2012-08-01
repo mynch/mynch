@@ -266,6 +266,63 @@ sub register {
         }
     );
 
+    $app->helper(
+        host_state_label => sub {
+            my $self       = shift;
+            my $attributes = shift;
+
+            my $states = {
+                0 => {
+                    text  => 'up',
+                    label => {
+                        HARD => 'label-success',
+                        SOFT => 'label',
+                    },
+                },
+                1 => {
+                    text  => 'down',
+                    label => {
+                        HARD => 'label-important',
+                        SOFT => 'label',
+                    },
+                },
+                2 => {
+                    text  => 'unreachable',
+                    label => {
+                        HARD => 'label-warning',
+                        SOFT => 'label',
+                    },
+                },
+            };
+
+            # Unwrap, for readability
+            my $state_type   = $attributes->{state_type};
+            my $state        = $attributes->{state};
+            my $attempt      = $attributes->{attempt};
+            my $max_attempts = $attributes->{max_attempts};
+
+            # Rewrite state_type, if "0" or "1" (from "GET hosts")
+            if    ($state_type eq "0") { $state_type = "SOFT"; }
+            elsif ($state_type eq "1") { $state_type = "HARD"; }
+
+            # Button content
+            my $label = $states->{$state}->{label}->{$state_type};
+            my $text  = $states->{$state}->{text};
+
+            # Extra text for SOFT non-UP entries
+            if ( $state_type eq "SOFT" and $state ne '0' ) {
+                $text .= sprintf( "&nbsp;(%d/%d)",
+                                  $attempt, $max_attempts, );
+            }
+
+            my $html =
+              sprintf( '<span class="label %s">%s</span>', $label, $text );
+
+
+            return $html;
+        }
+    );
 }
+
 
 1;

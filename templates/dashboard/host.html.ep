@@ -1,0 +1,93 @@
+% layout 'bootstrap', title 'Mynch';
+% content_for header => begin
+<meta http-equiv="Refresh" content="60" />
+% end
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span8">
+      <h2>Host <%= $self->stash->{show_host} %></h2>
+      <div class="row-fluid">
+        <div class="span4">Host is
+          % my $entry = @{ $self->stash->{host} }[0];
+          % my $label_items = {
+          %   state        => $entry->{state},
+          %   state_type   => $entry->{state_type},
+          %   attempt      => $entry->{attempt},
+          %   max_attempts => $entry->{max_check_attempts},
+          % };
+          %== host_state_label ( $label_items )
+          %= duration $entry->{last_state_change}
+        </div>
+        <div class="span8">
+         %= $entry->{plugin_output}
+        </div>
+      </div>
+      <div class="row-fluid">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>actions</th>
+            <th>duration</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $service ( servicesbyhostgroup_sort( $self->stash->{host_services} ) ) {
+          % my $label_items = {
+          %   state        => $service->{state},
+          %   state_type   => $service->{state_type},
+          %   attempt      => $service->{current_attempt},
+          %   max_attempts => $service->{max_check_attempts},
+          % };
+          <tr>
+            <td>
+              %== service_state_label ( $label_items )
+            </td>
+            <td class="action">
+              <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+                %= hidden_field 'host' => $service->{host_name}
+                %= hidden_field 'service' => $service->{display_name}
+                % if ($service->{state} > 0) {
+                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
+                % }
+                %== button_recheck($service->{host_name}, $service->{display_name})
+              </form>
+            </td>
+            <td>
+              %= duration $service->{last_hard_state_change}
+            </td>
+            <td>
+              %= $service->{display_name}
+            </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan=4 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
+              %= $service->{plugin_output}
+            </td> 
+          </tr>
+          % }
+        </tbody>
+      </table>
+
+      </div>
+    </div>
+
+<!--
+    <div class="span8">
+      <pre>
+% my $argh = Data::Dumper->Dump( $self->stash->{host} );
+%= $argh
+      </pre>
+      <pre>
+% my $argh2 = Data::Dumper->Dump( $self->stash->{host_services} );
+%= $argh2
+      </pre>
+    </div>
+-->
+
+  </div>
+</div>
+
