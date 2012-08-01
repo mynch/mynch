@@ -89,3 +89,17 @@
   </div>
 </div>
 
+<script>
+function init()
+{
+  $("form").on("submit", false)
+}
+window.onload=init;
+
+function doajax( params )
+{
+  $("#" + params["id"]).button('loading');
+  $.post("/dashboard/dostuff", params);
+}
+</script>
+
