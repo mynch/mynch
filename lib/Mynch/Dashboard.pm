@@ -155,6 +155,8 @@ sub dostuff {
 method host {
     $self->host_data;
     $self->host_service_data;
+    $self->log_data;
+    $self->hostgroup_summary;
     $self->render;
 }
 
