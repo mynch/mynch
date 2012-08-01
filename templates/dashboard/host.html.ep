@@ -31,6 +31,7 @@
             <th>actions</th>
             <th>duration</th>
             <th>service</th>
+            <th>output</th>
           </tr>
         </thead>
         <tbody>
@@ -61,10 +62,7 @@
             <td>
               %= $service->{display_name}
             </td>
-          </tr>
-          <tr>
-            <td>&nbsp;</td>
-            <td colspan=4 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
+            <td style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
               %= $service->{plugin_output}
             </td> 
           </tr>
