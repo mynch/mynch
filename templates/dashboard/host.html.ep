@@ -7,11 +7,22 @@
   <div class="row-fluid">
     <div class="span8">
       <div class="page-header">
-        <h1>Host <%= $self->stash->{show_host} %> <small><a href="/dashboard">(back...)</a></small></h1>
+        <h1>Host <%= $self->stash->{show_host} %> <small>
+          % my $entry = @{ $self->stash->{host} }[0];
+          % if (scalar @{ $entry->{groups} } > 0)
+          % {
+          %   foreach my $hostgroup ( @{ $entry->{groups} } ) {
+            <a href="/dashboard/hostgroup/<%= $hostgroup %>"><%= $hostgroup %></a>
+          %   }
+          % }
+          % else
+          % {
+            <a href="/dashboard">(dashboard)</a>
+          % }
+        </small></h1>
       </div>
       <div class="row-fluid">
         <div class="span4">Host is
-          % my $entry = @{ $self->stash->{host} }[0];
           % my $label_items = {
           %   state        => $entry->{state},
           %   state_type   => $entry->{state_type},
