@@ -121,19 +121,6 @@
       </div>
     </div>
 
-<!--
-    <div class="span8">
-      <pre>
-% my $argh = Data::Dumper->Dump( $self->stash->{host} );
-%= $argh
-      </pre>
-      <pre>
-% my $argh2 = Data::Dumper->Dump( $self->stash->{host_services} );
-%= $argh2
-      </pre>
-    </div>
--->
-
 <!-- MOCKUP - log entries here -->
 
     <div class="span4">
