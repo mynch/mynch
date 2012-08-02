@@ -154,6 +154,21 @@ sub register {
     );
 
     $app->helper(
+        button_recheck_all => sub {
+            my $self  = shift;
+            my $host = shift;
+            my $service = shift;
+            my $id = sha1_hex($host . "RecheckAll");
+
+            my $html =
+  '<button class="btn btn-primary" data-loading-text="rechecking..." id="' . $id . '" '
+. 'onClick=\'doajax( { host: "' . $host . '", submit: "RecheckAll", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="RecheckAll" alt="Recheck" title="Recheck"><i alt="Recheck All" title="Recheck All" class="icon-refresh"></i> Recheck all</button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
         button_acknowledge => sub {
             my $self  = shift;
             my $host = shift;
