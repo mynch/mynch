@@ -145,6 +145,13 @@ method hostgroup_summary {
         $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
         $query .= "And: 2\n";
     }
+    if (exists $self->stash->{config}->{filters}->{'hide-hostgroups'})
+    {
+        foreach my $hidegroup (@{ $self->stash->{config}->{filters}->{'hide-hostgroups'} })
+        {
+          $query .= "Filter: name != $hidegroup\n";
+        }
+    }
 
     my $results_ref = $ls->fetch( $query );
     my $hostgroup_status_ref = $ls->massage($results_ref, \@columns);

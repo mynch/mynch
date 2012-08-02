@@ -11,7 +11,7 @@
           % my $entry = @{ $self->stash->{host} }[0];
           % if (scalar @{ $entry->{groups} } > 0)
           % {
-          %   foreach my $hostgroup ( @{ $entry->{groups} } ) {
+          %   foreach my $hostgroup ( @{ Mynch::Config->filter_groups($self->stash->{config}, $entry->{groups}) }) {
             <a href="/dashboard/hostgroup/<%= $hostgroup %>"><%= $hostgroup %></a>
           %   }
           % }
@@ -167,7 +167,7 @@
      % # hostgroup context goes here
 
     <div class="span4">
-      % my $hostgroups = $entry->{groups};
+      % my $hostgroups = Mynch::Config->filter_groups($self->stash->{config}, $entry->{groups});
 
       % if (scalar @{ $hostgroups } == 0) {
       <h2>Hostgroups</h2>
