@@ -121,7 +121,7 @@
       </div>
     </div>
 
-<!-- MOCKUP - log entries here -->
+     % # logs for host goes here
 
     <div class="span4">
       <h2>Recent events</h2>
@@ -136,7 +136,6 @@
           <tr>
             <th>state</th>
             <th>age</th>
-            <th>host</th>
             <th>service</th>
           </tr>
         </thead>
@@ -154,9 +153,6 @@
             </td>
             <td>
               %= duration $log_entry->{time}
-            </td>
-            <td>
-              %= $log_entry->{host_name}
             </td>
             <td>
               %= $log_entry->{service_description}

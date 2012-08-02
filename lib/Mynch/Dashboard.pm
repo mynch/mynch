@@ -33,6 +33,32 @@ method log_data {
     $self->stash( log_entries => $data_ref );
 }
 
+method log_data_host {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my $since = time() - 86400;    # 1 day of log data
+
+    my @columns = qw{ type time state state_type host_name
+      service_description attempt
+      current_service_max_check_attempts };
+
+    my $query;
+    $query .= "GET log\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: time >= $since\n";
+    $query .= "Filter: host_name = " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: type = SERVICE ALERT\n";
+    $query .= "Filter: type = HOST ALERT\n";
+    $query .= "Or: 2\n";
+
+    my $results_ref = $ls->fetch( $query );
+
+    my $data_ref = $ls->massage( $results_ref, \@columns );
+
+    $self->stash( log_entries => $data_ref );
+}
+
+
 method host_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -190,7 +216,7 @@ sub dostuff {
 method host {
     $self->host_data;
     $self->host_service_data;
-    $self->log_data;
+    $self->log_data_host;
     $self->hostgroup_context;
     $self->render;
 }
