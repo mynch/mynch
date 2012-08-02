@@ -75,6 +75,22 @@ method host_data {
    $self->stash( host => $tmp_status_ref );
 }
 
+method host_downtime_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ author comment end_time start_time is_service service_display_name };
+
+    my $query;
+    $query .= "GET downtimes\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( downtimes => $tmp_status_ref );
+}
+
 method host_service_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -223,6 +239,7 @@ sub dostuff {
 method host {
     $self->host_data;
     $self->host_service_data;
+    $self->host_downtime_data;
     $self->log_data_host;
     $self->hostgroup_context;
     $self->render;

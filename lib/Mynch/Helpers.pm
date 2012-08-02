@@ -1,6 +1,7 @@
 package Mynch::Helpers;
 
 use Time::Duration;
+use Date::Format;
 use Digest::SHA1  qw(sha1_hex);
 
 use strict;
@@ -10,6 +11,15 @@ use base 'Mojolicious::Plugin';
 
 sub register {
     my ( $self, $app ) = @_;
+
+    $app->helper(
+        abbr_datetime => sub {
+          my $self = shift;
+          my $time = shift;
+
+          return time2str("%h %d %R", $time);
+        }
+    );
 
     $app->helper(
         duration => sub {
