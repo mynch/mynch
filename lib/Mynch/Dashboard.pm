@@ -151,6 +151,12 @@ sub dostuff {
 
     if ($host && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+      if ($submit eq "Ack") {
+        $ls->send_commands("ACKNOWLEDGE_HOST_PROBLEM;$host;1;$notify;1;$nick;Ack.");
+      }
+      if ($submit eq "Recheck") {
+        $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now");
+      }
       if ($submit eq "RecheckAll") {
         $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now\n"
                           ."SCHEDULE_FORCED_HOST_SVC_CHECKS;$host;$now");

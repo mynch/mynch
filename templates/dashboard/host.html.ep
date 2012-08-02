@@ -22,7 +22,7 @@
         </small></h1>
       </div>
       <div class="row-fluid">
-        <div class="span4">Host is
+        <div class="span3">Host is
           % my $label_items = {
           %   state        => $entry->{state},
           %   state_type   => $entry->{state_type},
@@ -32,7 +32,16 @@
           %== host_state_label ( $label_items )
           %= duration $entry->{last_state_change}
         </div>
-        <div class="span8">
+        <div class="span2 action">
+          <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+            %= hidden_field 'host' => $self->stash->{show_host}
+            % if ($entry->{state} > 0) {
+              %== button_acknowledge_host($self->stash->{show_host}, $entry->{acknowledged})
+            % }
+            %== button_recheck_host($self->stash->{show_host})
+          </form>
+        </div>
+        <div class="span7">
          %= $entry->{plugin_output}
         </div>
       </div>
@@ -90,7 +99,7 @@
                 %= hidden_field 'host' => $service->{host_name}
                 %= hidden_field 'service' => $service->{display_name}
                 % if ($service->{state} > 0) {
-                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
+                  %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
                 % }
                 %== button_recheck($service->{host_name}, $service->{display_name})
               </form>

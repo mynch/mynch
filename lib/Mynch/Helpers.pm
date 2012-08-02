@@ -154,6 +154,20 @@ sub register {
     );
 
     $app->helper(
+        button_recheck_host => sub {
+            my $self  = shift;
+            my $host = shift;
+            my $id = sha1_hex($host . "Recheck");
+
+            my $html =
+  '<button class="btn btn-mini" data-loading-text="rechecking..." id="' . $id . '" '
+. 'onClick=\'doajax( { host: "' . $host . '", submit: "Recheck", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
         button_recheck_all => sub {
             my $self  = shift;
             my $host = shift;
@@ -183,6 +197,25 @@ sub register {
             my $html =
   '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr . 'id="' . $id . '" ' 
 . 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Ack", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
+        button_acknowledge_host => sub {
+            my $self  = shift;
+            my $host = shift;
+            my $acknowledged = shift;
+            my $class = "btn btn-mini";
+            my $extraattr = "";
+            my $id = sha1_hex($host . "Ack");
+
+            if ($acknowledged == 1) { $class .= " btn-success"; $extraattr = "disabled "; }
+
+            my $html =
+  '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr . 'id="' . $id . '" ' 
+. 'onClick=\'doajax( { host: "' . $host . '", submit: "Ack", id: "' . $id . '" } );\' '
 . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             return $html;
         }
