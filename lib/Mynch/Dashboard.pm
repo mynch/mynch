@@ -4,6 +4,7 @@ use Mynch::Livestatus;
 use Mynch::Config;
 use List::MoreUtils qw{ uniq };
 use Method::Signatures;
+use Time::Local;
 
 method log {
     $self->log_data;
@@ -231,6 +232,22 @@ sub dostuff {
         $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now\n"
                           ."SCHEDULE_FORCED_HOST_SVC_CHECKS;$host;$now");
       }
+      if ($submit eq "Downtime") {
+        my $comment        = $self->param('comment');
+        my $duration       = parse_duration($self->param('duration')) || 120;
+        my $downtimeoption = $self->param('downtimeoption');
+
+        my $command = "";
+        my $end = $now + $duration * 60;
+
+        if ($downtimeoption eq "hostonly") {
+          $command .= "SCHEDULE_HOST_DOWNTIME;";
+        } else {
+          $command .= "SCHEDULE_HOST_SVC_DOWNTIME;";
+        }
+        $command .= "$host;$now;$end;1;0;0;$nick;$comment\n";
+        $ls->send_commands($command);
+      }
     }
 
     $self->redirect_to($referrer);
@@ -275,4 +292,71 @@ method hostgroup_filter(Str :$query_key, Str :$query_operator) {
     }
     return $query;
 }
+
+# Return the duration from now to the specified time in minutes.
+# Shamelessly lifted from nagios-irc by bjorn and friends
+sub parse_duration {
+    my ($s) = @_;
+
+    return 0 unless $s;
+
+    my $now = time;
+    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) =
+        localtime($now);
+
+    my $secs = 0;
+    if ($s =~ /^(\d{4})-(\d+)-(\d+)(?:T(\d+):(\d+)(?::(\d+))?)?$/) {
+        ($year, $mon, $mday, $hour, $min, $sec) =
+            ($1, $2, $3, $4, $5, $6);
+        my $then = timelocal($sec||0, $min||0, $hour||0, $mday, $mon-1, $year);
+        $secs = $then - $now;
+        $secs = 0 if $secs < 0;
+    } elsif ($s =~ /^T?(\d+):(\d+)(?::(\d+))?$/) {
+        ($hour, $min, $sec) = ($1, $2, $3);
+        my $then = timelocal($sec||0, $min, $hour, $mday, $mon, $year);
+        $then += 86400 if $then < $now;
+        $secs = $then - $now;
+    } elsif ($s =~ /^(\d+)([mhdw])?$/) {
+        my $dur;
+        if (defined $2 && $2 eq "w") {
+            $dur = $1 * 60 * 24 * 7;
+        } elsif (defined $2 && $2 eq "d") {
+            $dur = $1 * 60 * 24;
+        } elsif (defined $2 && $2 eq "h") {
+            $dur = $1 * 60;
+        } else {
+            $dur = $1;
+        }
+        if ($dur > 10*365*24*60) {
+            # don't overdo it
+            $dur = 10*365*24*60;
+        }
+        $secs = 60 * $dur;
+    } elsif ($s eq "morning") {
+        if ($hour >= 8) {
+            ($mday,$mon,$year) = (localtime($now+86400))[3,4,5];
+        }
+        my $then = timelocal(0, 0, 8, $mday, $mon, $year);
+        $secs = $then - $now;
+    } elsif ($s eq "tomorrow") {
+        ($mday,$mon,$year) = (localtime($now+86400))[3,4,5];
+        my $then = timelocal(0, 0, 8, $mday, $mon, $year);
+        return int(($then - $now + 59) / 60);
+    } elsif ($s eq "nbd") { # Next Business Day
+        my $offset = 0;
+        if ($hour < 8) {
+            # Let's try 08:00 today first
+            $offset = -86400;
+        }
+        do {
+            $offset += 86400;
+            ($mday, $mon, $year, $wday) = (localtime($now + $offset))[3,4,5,6];
+        } while ($wday == 6 || $wday == 0); # TODO: nice-to-have... Use Date::Holidays and country code
+
+        my $then = timelocal(0, 0, 8, $mday, $mon, $year);
+        $secs = $then - $now;
+    }
+    return int(($secs + 59) / 60);
+}
+
 1;

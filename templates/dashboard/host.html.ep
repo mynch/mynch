@@ -80,12 +80,38 @@
           <button type="button" class="close" data-dismiss="modal">×</button>
           <h3><i class="icon-wrench"></i> Schedule downtime</h3>
         </div>
-        <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+        <form class="form-horizontal" action="/dashboard/dostuff" autocomplete="off" method="POST" id="downtimeform">
+          %= hidden_field 'host' => $self->stash->{show_host}
           <div class="modal-body">
-            <input type="text" class="span8" placeholder="Taking the server for a walk...">
+            <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="inputcomment">Comment</label>
+              <div class="controls">
+                <input type="text" id="inputcomment" name="comment" placeholder="Taking the server for a walk...">
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label" for="inputduration">Duration</label>
+              <div class="controls">
+                <input type="text" class="span4" name="duration" placeholder="2h">
+                <p class="help-block">Default 2h, same parsing as nagios-irc (e.g. "morning" and "nbd" is valid)</p>
+              </div>
+            </div>
+            <div class="control-group">
+              <div class="controls">
+                <label class="radio">
+                  <input type="radio" name="downtimeoption" id="optionsRadios1" value="hostonly" checked>
+                  Host only
+                </label>
+                <label class="radio">
+                  <input type="radio" name="downtimeoption" id="optionsRadios2" value="hostandservices">
+                  Host and services
+                </label>
+              </div>
+            </div>
           </div>
           <div class="modal-footer">
-            <button type="submit" class="btn btn-primary"><i class="icon-wrench"></i> Schedule downtime</button>
+            <button type="submit" name="submit" value="Downtime" class="btn btn-primary"><i class="icon-wrench"></i> Schedule downtime</button>
           </div>
         </form>
       </div>
@@ -231,7 +257,8 @@
 <script>
 function init()
 {
-  $("form").on("submit", false)
+  $("#downtimeform").on("submit", true);
+  $("form").on("submit", false);
 }
 window.onload=init;
 
