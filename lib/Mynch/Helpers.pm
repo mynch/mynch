@@ -149,6 +149,18 @@ sub register {
     );
 
     $app->helper(
+        button_downtime => sub {
+            my $self  = shift;
+
+            my $html =
+  '<button class="btn btn-primary" '
+. 'onClick="$(\'#downtimemodal\').modal(\'show\');" '
+. 'type="button"><i class="icon-wrench"></i> Schedule downtime</button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
         button_recheck => sub {
             my $self  = shift;
             my $host = shift;
