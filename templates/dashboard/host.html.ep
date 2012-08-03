@@ -64,6 +64,23 @@
         % }
       </div>
 
+      % if (scalar @{ $self->stash->{comments} } > 0) {
+      <div class="alert alert-block alert-info" id="hostcomment">
+        <h4 class="alert-heading"><i class="icon-comment"></i> Comment</h4>
+          % foreach my $comment ( @{ $self->stash->{comments} } ) {
+            % if ($comment->{'is_service'} eq 0) {
+              <div id="comment<%= $comment->{'id'} %>">
+                <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+                %= hidden_field 'comment' => $comment->{id}
+                <%= $comment->{comment} %> (<%= abbr_datetime($comment->{entry_time}) %> by <%= $comment->{author} %>)
+                %== button_delete_comment($comment->{id})
+                </form>
+              </div>
+            % }
+          % }
+      </div>
+      % }
+
       <div class="modal hide" id="downtimemodal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">×</button>

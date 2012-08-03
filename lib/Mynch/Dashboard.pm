@@ -92,6 +92,23 @@ method host_downtime_data {
    $self->stash( downtimes => $tmp_status_ref );
 }
 
+method host_comments_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ author comment entry_time entry_type id is_service service_display_name };
+
+    my $query;
+    $query .= "GET comments\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: entry_type = 1\n"; # user-set comments only
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( comments => $tmp_status_ref );
+}
+
 method host_service_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -202,6 +219,7 @@ sub dostuff {
 
     my $host       = $self->param('host');
     my $service    = $self->param('service');
+    my $comment    = $self->param('comment');
     my $submit     = $self->param('submit');
     my $referrer   = $self->req->headers->referrer;
 
@@ -233,7 +251,6 @@ sub dostuff {
                           ."SCHEDULE_FORCED_HOST_SVC_CHECKS;$host;$now");
       }
       if ($submit eq "Downtime") {
-        my $comment        = $self->param('comment');
         my $duration       = parse_duration($self->param('duration')) || 120;
         my $downtimeoption = $self->param('downtimeoption');
 
@@ -249,6 +266,12 @@ sub dostuff {
         $ls->send_commands($command);
       }
     }
+    if ($comment && $submit) {
+      my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+      if ($submit eq "DelComment") {
+        $ls->send_commands("DEL_HOST_COMMENT;$comment");
+      }
+    }
 
     $self->redirect_to($referrer);
 }
@@ -257,6 +280,7 @@ method host {
     $self->host_data;
     $self->host_service_data;
     $self->host_downtime_data;
+    $self->host_comments_data;
     $self->log_data_host;
     $self->hostgroup_context;
     $self->render;
