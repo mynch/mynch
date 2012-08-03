@@ -39,15 +39,15 @@
               <form action="/dashboard/dostuff" autocomplete="off" method="POST">
                 %= hidden_field 'host' => $service->{host_name}
                 %= hidden_field 'service' => $service->{display_name}
-                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
                 %== button_recheck($service->{host_name}, $service->{display_name})
+                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
               </form>
             </td>
             <td>
               %= duration $service->{last_hard_state_change}
             </td>
             <td>
-              %= $service->{host_name}
+              <a href="/dashboard/host/<%= $service->{host_name} %>"><%= $service->{host_name} %></a>
             </td>
             <td>
               %= $service->{display_name}
