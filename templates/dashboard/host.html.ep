@@ -41,8 +41,13 @@
         <h3>Actions:</h3>
         <form action="/dashboard/dostuff" autocomplete="off" method="POST">
           %= hidden_field 'host' => $self->stash->{show_host}
+          <div>
           %== button_recheck_all($self->stash->{show_host})
+          </div><div>
           %== button_downtime();
+          </div><div>
+          %== button_comment();
+          </div>
         </form>
       </div>
 
@@ -118,6 +123,28 @@
           </div>
           <div class="modal-footer">
             <button type="submit" name="submit" value="Downtime" class="btn btn-primary"><i class="icon-wrench"></i> Schedule downtime</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal hide" id="commentmodal">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">×</button>
+          <h3><i class="icon-comment"></i> Add host comment</h3>
+        </div>
+        <form class="form-horizontal" action="/dashboard/dostuff" autocomplete="off" method="POST" id="commentform">
+          %= hidden_field 'host' => $self->stash->{show_host}
+          <div class="modal-body">
+            <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="inputcomment">Comment</label>
+              <div class="controls">
+                <textarea rows="4" cols="80" id="inputcomment" name="comment" placeholder="This server may be possessed by poltergeists..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" name="submit" value="AddComment" class="btn btn-primary"><i class="icon-comment"></i> Add comment</button>
           </div>
         </form>
       </div>
@@ -264,6 +291,7 @@
 function init()
 {
   $("#downtimeform").on("submit", true);
+  $("#commentform").on("submit", true);
   $("form").on("submit", false);
 }
 window.onload=init;

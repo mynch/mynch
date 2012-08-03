@@ -161,6 +161,18 @@ sub register {
     );
 
     $app->helper(
+        button_comment => sub {
+            my $self  = shift;
+
+            my $html =
+  '<button class="btn btn-primary" '
+. 'onClick="$(\'#commentmodal\').modal(\'show\');" '
+. 'type="button"><i class="icon-comment"></i> Add comment</button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
         button_recheck => sub {
             my $self  = shift;
             my $host = shift;

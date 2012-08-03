@@ -238,6 +238,12 @@ sub dostuff {
       }
     }
 
+    if ($host && $comment && $submit) {
+      my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+      if ($submit eq "AddComment") {
+        $ls->send_commands("ADD_HOST_COMMENT;$host;1;$nick;$comment");
+      }
+    }
     if ($host && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
       if ($submit eq "Ack") {
