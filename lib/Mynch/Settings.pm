@@ -48,7 +48,7 @@ sub save_set {
         $self->flash( message => 'No set changed. No label, or no hostgroups (after washing)');
     }
 
-    $self->redirect_to('/settings/edit');
+    $self->redirect_to('/settings');
 }
 
 sub delete_set {
@@ -73,7 +73,7 @@ sub delete_set {
         $self->flash( message => 'Deleted set' );
     }
 
-    $self->redirect_to('/settings/edit');
+    $self->redirect_to('/settings');
 
 }
 
