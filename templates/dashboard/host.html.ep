@@ -38,7 +38,7 @@
     <div class="span4">
       
       <div class="page-header">
-        <h3>Actions:</h3>
+        <h3>Host actions:</h3>
         <form action="/dashboard/dostuff" autocomplete="off" method="POST">
           %= hidden_field 'host' => $self->stash->{show_host}
           <div>
