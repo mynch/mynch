@@ -175,10 +175,7 @@ method hostgroup_summary {
     $query .= "Filter: num_services_crit > 0\n";
     $query .= "Filter: num_hosts_down > 0\n";
     $query .= "Or: 2\n";
-    if (exists $self->stash->{show_hostgroups}) {
-        $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
-        $query .= "And: 2\n";
-    }
+    $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
     if (exists $self->stash->{config}->{filters}->{'hide-hostgroups'})
     {
         foreach my $hidegroup (@{ $self->stash->{config}->{filters}->{'hide-hostgroups'} })
