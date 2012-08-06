@@ -2,7 +2,7 @@ package Mynch::Helpers;
 
 use Time::Duration;
 use Date::Format;
-use Digest::SHA1  qw(sha1_hex);
+use Digest::SHA  qw(sha1_hex);
 
 use strict;
 use warnings;
