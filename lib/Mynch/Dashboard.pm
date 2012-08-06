@@ -230,6 +230,9 @@ sub dostuff {
       if ($submit eq "Ack") {
         $ls->send_commands("ACKNOWLEDGE_SVC_PROBLEM;$host;$service;1;$notify;1;$nick;Ack.");
       }
+      elsif ($submit eq "UnAck") {
+        $ls->send_commands("REMOVE_SVC_ACKNOWLEDGEMENT;$host;$service");
+      }
       elsif ($submit eq "Recheck") {
         $ls->send_commands("SCHEDULE_FORCED_SVC_CHECK;$host;$service;$now");
       }
@@ -246,14 +249,17 @@ sub dostuff {
       if ($submit eq "Ack") {
         $ls->send_commands("ACKNOWLEDGE_HOST_PROBLEM;$host;1;$notify;1;$nick;Ack.");
       }
-      if ($submit eq "Recheck") {
+      elsif ($submit eq "UnAck") {
+        $ls->send_commands("REMOVE_HOST_ACKNOWLEDGEMENT;$host");
+      }
+      elsif ($submit eq "Recheck") {
         $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now");
       }
-      if ($submit eq "RecheckAll") {
+      elsif ($submit eq "RecheckAll") {
         $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now\n"
                           ."SCHEDULE_FORCED_HOST_SVC_CHECKS;$host;$now");
       }
-      if ($submit eq "Downtime") {
+      elsif ($submit eq "Downtime") {
         my $duration       = parse_duration($self->param('duration')) || 120;
         my $downtimeoption = $self->param('downtimeoption');
 

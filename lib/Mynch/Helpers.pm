@@ -223,15 +223,22 @@ sub register {
             my $service = shift;
             my $acknowledged = shift;
             my $class = "btn btn-mini";
-            my $extraattr = "";
             my $id = sha1_hex($host . $service . "Ack");
+            my $html = "";
 
-            if ($acknowledged == 1) { $class .= " btn-success"; $extraattr = "disabled "; }
+            if ($acknowledged == 1) {
+              $class .= " btn-success";
 
-            my $html =
-  '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr . 'id="' . $id . '" ' 
+              $html =
+  '<button class="' . $class . '" data-loading-text="unacking..." id="' . $id . '" ' 
+. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "UnAck", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="UnAck" alt="Unack" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
+            } else {
+              $html =
+  '<button class="' . $class . '" data-loading-text="acking..." id="' . $id . '" ' 
 . 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Ack", id: "' . $id . '" } );\' '
 . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
+            }
             return $html;
         }
     );
@@ -242,15 +249,22 @@ sub register {
             my $host = shift;
             my $acknowledged = shift;
             my $class = "btn btn-mini";
-            my $extraattr = "";
             my $id = sha1_hex($host . "Ack");
+            my $html = "";
 
-            if ($acknowledged == 1) { $class .= " btn-success"; $extraattr = "disabled "; }
+            if ($acknowledged == 1) {
+              $class .= " btn-success";
 
-            my $html =
-  '<button class="' . $class . '" data-loading-text="acking..." ' . $extraattr . 'id="' . $id . '" ' 
+              $html =
+  '<button class="' . $class . '" data-loading-text="unacking..." id="' . $id . '" ' 
+. 'onClick=\'doajax( { host: "' . $host . '", submit: "UnAck", id: "' . $id . '" } );\' '
+. 'type="submit" name="submit" value="UnAck" alt="UnAck" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
+            } else {
+              $html =
+  '<button class="' . $class . '" data-loading-text="acking..." id="' . $id . '" ' 
 . 'onClick=\'doajax( { host: "' . $host . '", submit: "Ack", id: "' . $id . '" } );\' '
 . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
+            }
             return $html;
         }
     );
