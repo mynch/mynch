@@ -77,7 +77,7 @@ sub delete_set {
 
 }
 
-sub clear_settings {
+sub clear {
     my $self = shift;
 
     $self->flash( message => 'settings reverted to default' );
