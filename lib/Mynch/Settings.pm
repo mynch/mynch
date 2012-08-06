@@ -23,9 +23,9 @@ sub save_set {
 
     my $set        = $self->param('set');
     my $label      = $self->param('label');
-    my $hostgroups = $self->param('hostgroups');
+    my @hostgroups = $self->param('hostgroups');
 
-    my $hostgroups_ref = $self->wash_hostgroups($hostgroups);
+    my $hostgroups_ref = $self->wash_hostgroups(\@hostgroups);
 
     if ( $label and scalar @{ $hostgroups_ref } ) {
         my $set_data = {
@@ -90,7 +90,7 @@ sub wash_hostgroups {
     my $self = shift;
     my $hostgroups = shift;
 
-    my @candidate_hostgroups = split(/[,\s]+/, $hostgroups);
+    my @candidate_hostgroups = @{ $hostgroups };
 
     my $live_hostgroups_ref = $self->list_hostgroups();
     my @live_hostgroups = @{ $live_hostgroups_ref };
