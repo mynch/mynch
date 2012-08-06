@@ -308,15 +308,25 @@ method main_page {
 
 method hostgroup_filter(Str :$query_key, Str :$query_operator) {
     my $query = '';
+    my @hostgroups;
     if (exists $self->stash->{show_hostgroups}) {
-        my @hostgroups = split(/,/, $self->stash->{show_hostgroups});
-        foreach my $hostgroup (@hostgroups) {
-            $query .= sprintf("Filter: %s %s %s\n", $query_key, $query_operator, $hostgroup);
-        }
-        if (scalar @hostgroups > 1) {
-            $query .= sprintf("Or: %d\n", scalar @hostgroups);
-        }
+        @hostgroups = split(/,/, $self->stash->{show_hostgroups});
     }
+    elsif (exists $self->session->{settings}) {
+       my $settings = $self->session->{settings};
+       my @views = $settings->{view};
+       foreach my $hashref (@{ $views[0] } ) {
+           push @hostgroups, @{ $hashref->{hostgroups} };
+       }
+    }
+
+    foreach my $hostgroup (@hostgroups) {
+        $query .= sprintf("Filter: %s %s %s\n", $query_key, $query_operator, $hostgroup);
+    }
+    if (scalar @hostgroups > 1) {
+        $query .= sprintf("Or: %d\n", scalar @hostgroups);
+    }
+    
     return $query;
 }
 
