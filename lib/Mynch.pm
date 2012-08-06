@@ -46,7 +46,7 @@ sub startup {
     $r->route('/dashboard/hostgroup/:show_hostgroups')
         ->to( controller => 'dashboard', action => 'main_page', show_hostgroups => '' );
 
-    $r->route('/dashboard/host/:show_host')->to(
+    $r->route('/dashboard/host/#show_host')->to(
         controller => 'dashboard',
         action => 'host',
         show_host => ''
