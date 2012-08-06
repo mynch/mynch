@@ -69,10 +69,10 @@
         % }
       </div>
 
-      % if (scalar @{ $self->stash->{comments} } > 0) {
+      % if (scalar @{ $self->stash->{host_comments} } > 0) {
       <div class="alert alert-block alert-info" id="hostcomment">
         <h4 class="alert-heading"><i class="icon-comment"></i> Comment</h4>
-          % foreach my $comment ( @{ $self->stash->{comments} } ) {
+          % foreach my $comment ( @{ $self->stash->{host_comments} } ) {
             % if ($comment->{'is_service'} eq 0) {
               <div id="comment<%= $comment->{'id'} %>">
                 <form action="/dashboard/dostuff" autocomplete="off" method="POST">

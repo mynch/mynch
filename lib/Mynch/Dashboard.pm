@@ -102,11 +102,24 @@ method host_comments_data {
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
     $query .= "Filter: entry_type = 1\n"; # user-set comments only
+    $query .= "Filter: is_service = 0\n"; # host comments only
     my $results_ref = $ls->fetch( $query );
 
     my $tmp_status_ref = $ls->massage($results_ref, \@columns);
  
-   $self->stash( comments => $tmp_status_ref );
+   $self->stash( host_comments => $tmp_status_ref );
+
+    $query = "";
+    $query .= "GET comments\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: entry_type = 1\n"; # user-set comments only
+    $query .= "Filter: is_service = 1\n"; # service comments only
+    $results_ref = $ls->fetch( $query );
+
+    $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( service_comments => $tmp_status_ref );
 }
 
 method host_service_data {
