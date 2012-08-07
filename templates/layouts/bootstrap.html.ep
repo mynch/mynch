@@ -39,6 +39,12 @@
               <li><a href="/reports">Reports</a></li>
               <li class="divider-vertical"></li>
               <li><a href="/settings"><i class="icon-th-list icon-white"></i>Settings</a></li>
+              <li class="divider-vertical"></li>
+              <li>
+                <form class="navbar-form pull-right">
+                  <label class="checkbox" for="refresh"><input class="checkbox" type="checkbox" checked="checked" id="refresh" />Auto refresh</label>
+                </form>
+              </li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>

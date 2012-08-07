@@ -1,7 +1,4 @@
 % layout 'bootstrap', title 'Mynch';
-% content_for header => begin
-<meta http-equiv="Refresh" content="60" />
-% end
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -196,8 +193,21 @@ function init()
   $("#downtimeform").on("submit", true);
   $("#commentform").on("submit", true);
   $("form").on("submit", false);
+  $('#downtimemodal').on('shown', function () {
+    $('#refresh').attr('checked', false);
+  });
+  $('#commentmodal').on('shown', function () {
+    $('#refresh').attr('checked', false);
+  });
+  setTimeout( reloadPage, 60000);
 }
 window.onload=init;
+
+function reloadPage()  {
+    if( $('#refresh').is(':checked') ) {
+      window.location.reload();
+    }
+}
 
 function doajax( params )
 {

@@ -1,7 +1,4 @@
 % layout 'bootstrap', title 'Mynch';
-% content_for header => begin
-<meta http-equiv="Refresh" content="30" />
-% end
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -158,8 +155,15 @@
 function init()
 {
   $("form").on("submit", false)
+  setTimeout( reloadPage, 30000);
 }
 window.onload=init;
+
+function reloadPage()  {
+    if( $('#refresh').is(':checked') ) {
+      window.location.reload();
+    }
+}
 
 function doajax( params )
 {
