@@ -142,6 +142,27 @@ method host_service_data {
    $self->stash( host_services => $tmp_status_ref );
 }
 
+method service_detail_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ display_name state scheduled_downtime_depth
+           state_type acknowledged downtimes last_state_change
+           last_hard_state_change last_check next_check
+           last_notification current_attempt max_check_attempts
+           plugin_output long_plugin_output };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: display_name = " . $self->stash->{show_service} . "\n";
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( service_detail => $tmp_status_ref );
+}
+
 method status_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
@@ -305,6 +326,13 @@ method host {
     $self->host_comments_data;
     $self->log_data_host;
     $self->hostgroup_context;
+    $self->render;
+}
+
+method service {
+    $self->service_detail_data;
+    $self->host_downtime_data;
+    $self->host_comments_data;
     $self->render;
 }
 

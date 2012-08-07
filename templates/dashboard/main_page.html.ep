@@ -50,7 +50,7 @@
               <a href="/dashboard/host/<%= $service->{host_name} %>"><%= $service->{host_name} %></a>
             </td>
             <td>
-              %= $service->{display_name}
+              <a href="/dashboard/service/<%= $service->{host_name}%>/<%= $service->{display_name} %>"><%= $service->{display_name} %></a>
             </td>
           </tr>
           <tr>

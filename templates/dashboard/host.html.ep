@@ -186,7 +186,7 @@
               %= duration $service->{last_hard_state_change}
             </td>
             <td>
-              %= $service->{display_name}
+              <a href="/dashboard/service/<%= $service->{host_name}%>/<%= $service->{display_name} %>"><%= $service->{display_name} %></a>
             </td>
             <td style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
               %= $service->{plugin_output}

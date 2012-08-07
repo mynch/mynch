@@ -52,6 +52,13 @@ sub startup {
         show_host => ''
     );
 
+    $r->route('/dashboard/service/#show_host/#show_service')->to(
+        controller => 'dashboard',
+        action => 'service',
+        show_host => '',
+        show_service => ''
+    );
+
     $r->route('/settings/:action')->to(
         controller => 'settings',
         action     => 'settings_page',
