@@ -107,19 +107,26 @@ method host_comments_data {
 
     my $tmp_status_ref = $ls->massage($results_ref, \@columns);
  
-   $self->stash( host_comments => $tmp_status_ref );
+    $self->stash( host_comments => $tmp_status_ref );
+}
 
-    $query = "";
+method service_comments_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ author comment entry_time entry_type id is_service service_display_name };
+
+    my $query;
     $query .= "GET comments\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: service_display_name =~ " . $self->stash->{show_service} . "\n";
     $query .= "Filter: entry_type = 1\n"; # user-set comments only
     $query .= "Filter: is_service = 1\n"; # service comments only
-    $results_ref = $ls->fetch( $query );
+    my $results_ref = $ls->fetch( $query );
 
-    $tmp_status_ref = $ls->massage($results_ref, \@columns);
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
  
-   $self->stash( service_comments => $tmp_status_ref );
+    $self->stash( service_comments => $tmp_status_ref );
 }
 
 method host_service_data {
@@ -140,6 +147,27 @@ method host_service_data {
     my $tmp_status_ref = $ls->massage($results_ref, \@columns);
  
    $self->stash( host_services => $tmp_status_ref );
+}
+
+method service_detail_data {
+    my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+
+    my @columns = qw{ display_name state scheduled_downtime_depth
+           state_type acknowledged downtimes last_state_change
+           last_hard_state_change last_check next_check
+           last_notification current_attempt max_check_attempts
+           plugin_output long_plugin_output };
+
+    my $query;
+    $query .= "GET services\n";
+    $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: host_name =~ " . $self->stash->{show_host} . "\n";
+    $query .= "Filter: display_name = " . $self->stash->{show_service} . "\n";
+    my $results_ref = $ls->fetch( $query );
+
+    my $tmp_status_ref = $ls->massage($results_ref, \@columns);
+ 
+   $self->stash( service_detail => $tmp_status_ref );
 }
 
 method status_data {
@@ -238,7 +266,22 @@ sub dostuff {
 
     my $now        = time();
 
-    if ($host && $service && $submit) {
+    if ($host && $service && $comment && $submit) {
+      my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
+      if ($submit eq "AddComment") {
+        $ls->send_commands("ADD_SVC_COMMENT;$host;$service;1;$nick;$comment");
+      }
+      elsif ($submit eq "Downtime") {
+        my $duration       = parse_duration($self->param('duration')) || 120;
+
+        my $end = $now + $duration * 60;
+
+        my $command = "SCHEDULE_SVC_DOWNTIME;$host;$service;$now;$end;1;0;0;$nick;$comment\n";
+        $ls->send_commands($command);
+      }
+    }
+
+    elsif ($host && $service && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
       if ($submit eq "Ack") {
         $ls->send_commands("ACKNOWLEDGE_SVC_PROBLEM;$host;$service;1;$notify;1;$nick;Ack.");
@@ -251,13 +294,14 @@ sub dostuff {
       }
     }
 
-    if ($host && $comment && $submit) {
+    elsif ($host && $comment && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
       if ($submit eq "AddComment") {
         $ls->send_commands("ADD_HOST_COMMENT;$host;1;$nick;$comment");
       }
     }
-    if ($host && $submit) {
+
+    elsif ($host && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
       if ($submit eq "Ack") {
         $ls->send_commands("ACKNOWLEDGE_HOST_PROBLEM;$host;1;$notify;1;$nick;Ack.");
@@ -288,10 +332,18 @@ sub dostuff {
         $ls->send_commands($command);
       }
     }
-    if ($comment && $submit) {
+
+    elsif ($comment && $submit) {
       my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
       if ($submit eq "DelComment") {
-        $ls->send_commands("DEL_HOST_COMMENT;$comment");
+        my $is_service = $self->param('is_service');
+        if ($is_service == 0) {
+          $ls->send_commands("DEL_HOST_COMMENT;$comment");
+        }
+        else 
+        {
+          $ls->send_commands("DEL_SVC_COMMENT;$comment");
+        }
       }
     }
 
@@ -305,6 +357,13 @@ method host {
     $self->host_comments_data;
     $self->log_data_host;
     $self->hostgroup_context;
+    $self->render;
+}
+
+method service {
+    $self->service_detail_data;
+    $self->host_downtime_data;
+    $self->service_comments_data;
     $self->render;
 }
 
