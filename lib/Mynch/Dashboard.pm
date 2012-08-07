@@ -323,6 +323,21 @@ sub dostuff {
       if ($submit eq "AddComment") {
         $ls->send_commands("ADD_HOST_COMMENT;$host;1;$nick;$comment");
       }
+      elsif ($submit eq "Downtime") {
+        my $duration       = parse_duration($self->param('duration')) || 120;
+        my $downtimeoption = $self->param('downtimeoption');
+
+        my $command = "";
+        my $end = $now + $duration * 60;
+
+        if ($downtimeoption eq "hostonly") {
+          $command .= "SCHEDULE_HOST_DOWNTIME;";
+        } else {
+          $command .= "SCHEDULE_HOST_SVC_DOWNTIME;";
+        }
+        $command .= "$host;$now;$end;1;0;0;$nick;$comment\n";
+        $ls->send_commands($command);
+      }
     }
 
     elsif ($host && $submit) {
@@ -339,21 +354,6 @@ sub dostuff {
       elsif ($submit eq "RecheckAll") {
         $ls->send_commands("SCHEDULE_FORCED_HOST_CHECK;$host;$now\n"
                           ."SCHEDULE_FORCED_HOST_SVC_CHECKS;$host;$now");
-      }
-      elsif ($submit eq "Downtime") {
-        my $duration       = parse_duration($self->param('duration')) || 120;
-        my $downtimeoption = $self->param('downtimeoption');
-
-        my $command = "";
-        my $end = $now + $duration * 60;
-
-        if ($downtimeoption eq "hostonly") {
-          $command .= "SCHEDULE_HOST_DOWNTIME;";
-        } else {
-          $command .= "SCHEDULE_HOST_SVC_DOWNTIME;";
-        }
-        $command .= "$host;$now;$end;1;0;0;$nick;$comment\n";
-        $ls->send_commands($command);
       }
     }
 
