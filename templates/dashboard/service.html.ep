@@ -16,7 +16,7 @@
           %   state        => $entry->{state},
           %   state_type   => $entry->{state_type},
           %   attempt      => $entry->{attempt},
-          %   max_attempts => $entry->{max_check_attempts},
+          %   max_attempts => $entry->{current_service_max_check_attempts},
           % };
           %== service_state_label ( $label_items )
           %= duration $entry->{last_state_change}
@@ -142,6 +142,50 @@
       </div>
 
     </div>
+
+     % # logs for service goes here
+
+    <div class="span4">
+      <h2>Recent events</h2>
+      % if (scalar @{ $log_entries } == 0) {
+      <div class="well">
+        No recent events.
+      </div>
+      % }
+      % else {
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>age</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $log_entry ( @{ $log_entries } ) {
+          % my $label_items = {
+          %   state        => $log_entry->{state},
+          %   state_type   => $log_entry->{state_type},
+          %   attempt      => $log_entry->{attempt},
+          %   max_attempts => $log_entry->{current_service_max_check_attempts},
+          % };
+          <tr>
+            <td>
+              %== service_state_label ( $label_items )
+            </td>
+            <td>
+              %= duration $log_entry->{time}
+            </td>
+            <td>
+              %= $log_entry->{service_description}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+      % }
+    </div>
+
   </div>
 </div>
 
