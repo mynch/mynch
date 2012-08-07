@@ -12,10 +12,10 @@
   </div>
 </div>
 <div class="row-fluid">
-  <div class="span6">
       % my $i = 0;
       % if ($settings->{view}) {
       % foreach my $set ( @{ $settings->{view} } ) {
+   <div class="span4">
       <form action="/settings/save_set">
         <input type="hidden" name="set" value="<%= $i %>" />
         <input name="label" type="text" class="span4" placeholder="label…" value="<%= $set->{label}%>"/>
@@ -23,7 +23,7 @@
       <div class="control-group">
          <label class="control-label" for="hostgroups">Hostgroups</label>
          <div class="controls">
-            <select multiple="multiple" name="hostgroups" id="hostgroups">
+            <select multiple="multiple" size="20" name="hostgroups" id="hostgroups">
               % HOSTGROUP: foreach my $hostgroup ( @{ $self->list_hostgroups() } ) {
               %   my $hit = 0;
               %   foreach my $selected_hostgroup ( @{ $set->{hostgroups} } ) {
@@ -48,19 +48,19 @@
         <input type="hidden" name="set" value="<%= $i %>" />
         <button type="submit" class="btn btn-warning"><i class="icon icon-remove"></i>Delete set</button>
       </form>
+    </div>
       % $i++
       % }
       % }
-      <hr>
-    </form>
     % if ( $i < 3 ) {
+   <div class="span4">
     <form action="/settings/save_set">
       <input type="hidden" name="set" value="new" />
       <input name="label" type="text" class="span4" placeholder="label…" />
       <div class="control-group">
          <label class="control-label" for="hostgroups">Hostgroups</label>
          <div class="controls">
-            <select multiple="multiple" name="hostgroups" id="hostgroups">
+            <select multiple="multiple" size="20" name="hostgroups" id="hostgroups">
               % foreach my $hostgroup ( @{ $self->list_hostgroups() } ) {
                 <option value="<%= $hostgroup %>"><%= $hostgroup %></option>
               % }
@@ -70,7 +70,12 @@
       <button type="submit" value="add" class="btn btn-success"><i class="icon icon-edit"></i>Add set</button>
       <hr>
     </form>
+  </div>
     % }
+</div>
+<hr />
+<div class="row-fluid">
+  <div class="span4">
     <form action="/settings/clear">
       <button type="submit" value="clear" class="btn btn-warning"><i class="icon icon-remove"></i>Clear</button>
       <span class="help-inline">
@@ -79,3 +84,4 @@
     </form>
   </div>
 </div>
+
