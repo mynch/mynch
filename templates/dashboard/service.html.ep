@@ -42,7 +42,7 @@
     <div class="span4">
       
       <div class="page-header">
-        <h3>Host actions:</h3>
+        <h3>Service actions:</h3>
         <form action="/dashboard/dostuff" autocomplete="off" method="POST">
           %= hidden_field 'host' => $self->stash->{show_host}
           %= hidden_field 'service' => $self->stash->{show_service}
@@ -65,26 +65,25 @@
         <h4 class="alert-heading"><i class="icon-wrench"></i> Scheduled downtime</h4>
         % if ($entry->{scheduled_downtime_depth} > 0) {
           % foreach my $downtime ( @{ $self->stash->{downtimes} } ) {
-            % if (($downtime->{'is_service'} eq 1) && ($downtime->{'service_display_name'} == $self->stash->{show_service})) {
+            % if (($downtime->{'is_service'} eq 1) && ($downtime->{'service_display_name'} eq $self->stash->{show_service})) {
               Downtime scheduled from <%= abbr_datetime($downtime->{start_time}) %> to <%= abbr_datetime($downtime->{end_time}) %> by <%= $downtime->{author} %>: <%= $downtime->{comment} %>
             % }
           % }
         % }
       </div>
 
-      % if (scalar @{ $self->stash->{host_comments} } > 0) {
+      % if (scalar @{ $self->stash->{service_comments} } > 0) {
       <div class="alert alert-block alert-info" id="servicecomment">
         <h4 class="alert-heading"><i class="icon-comment"></i> Comment</h4>
-          % foreach my $comment ( @{ $self->stash->{host_comments} } ) {
-            % if ($comment->{'is_service'} eq 0) {
+          % foreach my $comment ( @{ $self->stash->{service_comments} } ) {
               <div id="comment<%= $comment->{'id'} %>">
                 <form action="/dashboard/dostuff" autocomplete="off" method="POST">
                 %= hidden_field 'comment' => $comment->{id}
+                %= hidden_field 'is_service' => 1
                 <%= $comment->{comment} %> (<%= abbr_datetime($comment->{entry_time}) %> by <%= $comment->{author} %>)
-                %== button_delete_comment($comment->{id})
+                %== button_delete_comment($comment->{id}, 1)
                 </form>
               </div>
-            % }
           % }
       </div>
       % }
@@ -102,7 +101,7 @@
             <div class="control-group">
               <label class="control-label" for="inputcomment">Comment</label>
               <div class="controls">
-                <input type="text" id="inputcomment" name="comment" placeholder="Taking the server for a walk...">
+                <input type="text" id="inputcomment" name="comment" placeholder="Taking the service for a walk...">
               </div>
             </div>
             <div class="control-group">
@@ -122,7 +121,7 @@
       <div class="modal hide" id="commentmodal">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">×</button>
-          <h3><i class="icon-comment"></i> Add host comment</h3>
+          <h3><i class="icon-comment"></i> Add service comment</h3>
         </div>
         <form class="form-horizontal" action="/dashboard/dostuff" autocomplete="off" method="POST" id="commentform">
           %= hidden_field 'host' => $self->stash->{show_host}

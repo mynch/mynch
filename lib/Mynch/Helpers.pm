@@ -273,11 +273,12 @@ sub register {
         button_delete_comment => sub {
             my $self  = shift;
             my $comment = shift;
+            my $is_service = shift;
             my $id = sha1_hex($comment . "DelComment");
 
             my $html =
   '<button class="btn btn-mini" id="' . $id . '" '
-. 'onClick=\'doajax( { comment: "' . $comment . '", submit: "DelComment", id: "' . $id . '" } ); $("#comment' . $comment . '").remove()\' '
+. 'onClick=\'doajax( { comment: "' . $comment . '", is_service: "' . $is_service . '", submit: "DelComment", id: "' . $id . '" } ); $("#comment' . $comment . '").remove()\' '
 . 'type="submit" name="submit" value="DelComment" alt="DelComment" title="DelComment"><i alt="DelComment" title="DelComment" class="icon-remove"></i></button>';
             return $html;
         }
