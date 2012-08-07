@@ -17,6 +17,7 @@
         <thead>
           <tr>
             <th>state</th>
+            <th>actions</th>
             <th>duration</th>
             <th>host</th>
             <th>service</th>
@@ -34,16 +35,29 @@
             <td>
               %== service_state_label ( $label_items )
             </td>
-            <td>
-              %= duration $service->{last_hard_state_change}
-              %= duration $service->{last_notification}
+            <td class="action">
+              <form action="/dashboard/dostuff" autocomplete="off" method="POST">
+                %= hidden_field 'host' => $service->{host_name}
+                %= hidden_field 'service' => $service->{display_name}
+                %== button_recheck($service->{host_name}, $service->{display_name})
+                %== button_acknowledge($service->{host_name}, $service->{display_name}, $service->{acknowledged})
+              </form>
             </td>
             <td>
-              %= $service->{host_name}
+              %= duration $service->{last_hard_state_change}
+            </td>
+            <td>
+              <a href="/dashboard/host/<%= $service->{host_name} %>"><%= $service->{host_name} %></a>
             </td>
             <td>
               %= $service->{display_name}
             </td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td colspan=4 style="max-width: 500px" title="<%= $service->{long_plugin_output}%>">
+              %= $service->{plugin_output}
+            </td> 
           </tr>
           % }
         </tbody>
@@ -139,3 +153,18 @@
 
   </div>
 </div>
+
+<script>
+function init()
+{
+  $("form").on("submit", false)
+}
+window.onload=init;
+
+function doajax( params )
+{
+  $("#" + params["id"]).button('loading');
+  $.post("/dashboard/dostuff", params);
+}
+</script>
+

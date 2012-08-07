@@ -28,7 +28,7 @@ sub startup {
     # Router
     my $r = $self->routes;
 
-    $r->route('/')->to( controller => 'wallscreen', action => 'main_page' );
+    $r->route('/')->to( controller => 'frontpage', action => 'frontpage' );
 
     $r->route('/wallscreen/:action')->to(
         controller => 'wallscreen',
@@ -37,6 +37,20 @@ sub startup {
 
     $r->route('/wallscreen/hostgroup/:show_hostgroups')
         ->to( controller => 'wallscreen', action => 'main_page', show_hostgroups => '' );
+
+    $r->route('/dashboard/:action')->to(
+        controller => 'dashboard',
+        action => 'main_page'
+    );
+
+    $r->route('/dashboard/hostgroup/:show_hostgroups')
+        ->to( controller => 'dashboard', action => 'main_page', show_hostgroups => '' );
+
+    $r->route('/dashboard/host/#show_host')->to(
+        controller => 'dashboard',
+        action => 'host',
+        show_host => ''
+    );
 
     $r->route('/settings/:action')->to(
         controller => 'settings',

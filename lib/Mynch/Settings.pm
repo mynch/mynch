@@ -23,9 +23,9 @@ sub save_set {
 
     my $set        = $self->param('set');
     my $label      = $self->param('label');
-    my $hostgroups = $self->param('hostgroups');
+    my @hostgroups = $self->param('hostgroups');
 
-    my $hostgroups_ref = $self->wash_hostgroups($hostgroups);
+    my $hostgroups_ref = $self->wash_hostgroups(\@hostgroups);
 
     if ( $label and scalar @{ $hostgroups_ref } ) {
         my $set_data = {
@@ -48,7 +48,7 @@ sub save_set {
         $self->flash( message => 'No set changed. No label, or no hostgroups (after washing)');
     }
 
-    $self->redirect_to('/settings/edit');
+    $self->redirect_to('/settings');
 }
 
 sub delete_set {
@@ -73,11 +73,11 @@ sub delete_set {
         $self->flash( message => 'Deleted set' );
     }
 
-    $self->redirect_to('/settings/edit');
+    $self->redirect_to('/settings');
 
 }
 
-sub clear_settings {
+sub clear {
     my $self = shift;
 
     $self->flash( message => 'settings reverted to default' );
@@ -90,7 +90,7 @@ sub wash_hostgroups {
     my $self = shift;
     my $hostgroups = shift;
 
-    my @candidate_hostgroups = split(/[,\s]+/, $hostgroups);
+    my @candidate_hostgroups = @{ $hostgroups };
 
     my $live_hostgroups_ref = $self->list_hostgroups();
     my @live_hostgroups = @{ $live_hostgroups_ref };

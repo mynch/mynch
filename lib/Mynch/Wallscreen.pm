@@ -1,6 +1,7 @@
 package Mynch::Wallscreen;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
+use Mynch::Config;
 use List::MoreUtils qw{ uniq };
 use Method::Signatures;
 
@@ -45,19 +46,7 @@ method status_data {
     $query .= "GET servicesbyhostgroup\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: state != 0\n";
-    $query .= "Filter: plugin_output != UNKNOWN: No current data from munin\n";
-    $query .= "Filter: display_name != Puppet last update\n";
-    $query .= "Filter: display_name != Puppet pending\n";
-    $query .= "Filter: display_name != Puppet Pending\n";
-    $query .= "Filter: display_name != Puppet\n";
-    $query .= "Filter: display_name != Pending updates\n";
-    $query .= "Filter: display_name != Pending OS Updates\n";
-    $query .= "Filter: display_name != apt updates\n";
-    $query .= "Filter: display_name != pending packages\n";
-    $query .= "Filter: display_name != Pending packages\n";
-    $query .= "Filter: display_name != check apt\n";
-    $query .= "Filter: display_name != Yum\n";
-    $query .= "Filter: display_name != Package updates\n";
+    $query .= Mynch::Config->build_filter($self->stash->{config}, "service-noise");
     $query .= $self->hostgroup_filter(query_key => 'host_groups', query_operator => '>=');
     my $results_ref = $ls->fetch( $query );
 
@@ -90,9 +79,13 @@ method hostgroup_summary {
     $query .= "Filter: num_services_crit > 0\n";
     $query .= "Filter: num_hosts_down > 0\n";
     $query .= "Or: 2\n";
-    if (exists $self->stash->{show_hostgroups}) {
-        $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
-        $query .= "And: 2\n";
+    $query .= $self->hostgroup_filter(query_key => 'name', query_operator => '=');
+    if (exists $self->stash->{config}->{filters}->{'hide-hostgroups'})
+    {
+        foreach my $hidegroup (@{ $self->stash->{config}->{filters}->{'hide-hostgroups'} })
+        {
+          $query .= "Filter: name != $hidegroup\n";
+        }
     }
 
     my $results_ref = $ls->fetch( $query );
@@ -120,15 +113,25 @@ method main_page {
 
 method hostgroup_filter(Str :$query_key, Str :$query_operator) {
     my $query = '';
+    my @hostgroups;
     if (exists $self->stash->{show_hostgroups}) {
-        my @hostgroups = split(/,/, $self->stash->{show_hostgroups});
-        foreach my $hostgroup (@hostgroups) {
-            $query .= sprintf("Filter: %s %s %s\n", $query_key, $query_operator, $hostgroup);
-        }
-        if (scalar @hostgroups > 1) {
-            $query .= sprintf("Or: %d\n", scalar @hostgroups);
-        }
+        @hostgroups = split(/,/, $self->stash->{show_hostgroups});
     }
+    elsif (exists $self->session->{settings}) {
+       my $settings = $self->session->{settings};
+       my @views = $settings->{view};
+       foreach my $hashref (@{ $views[0] } ) {
+           push @hostgroups, @{ $hashref->{hostgroups} };
+       }
+    }
+
+    foreach my $hostgroup (@hostgroups) {
+        $query .= sprintf("Filter: %s %s %s\n", $query_key, $query_operator, $hostgroup);
+    }
+    if (scalar @hostgroups > 1) {
+        $query .= sprintf("Or: %d\n", scalar @hostgroups);
+    }
+    
     return $query;
 }
 1;

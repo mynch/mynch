@@ -1,0 +1,43 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h2>Recent events</h2>
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th>state</th>
+            <th>age</th>
+            <th>host</th>
+            <th>service</th>
+          </tr>
+        </thead>
+        <tbody>
+          % foreach my $log_entry ( @{ $log_entries } ) {
+          % my $label_items = {
+          %   state        => $log_entry->{state},
+          %   state_type   => $log_entry->{state_type},
+          %   attempt      => $log_entry->{attempt},
+          %   max_attempts => $log_entry->{current_service_max_check_attempts},
+          % };
+          <tr>
+            <td>
+              %== service_state_label ( $label_items )
+            </td>
+            <td>
+              %= duration $log_entry->{time}
+            </td>
+            <td>
+              %= $log_entry->{host_name}
+            </td>
+            <td>
+              %= $log_entry->{service_description}
+            </td>
+          </tr>
+          % }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

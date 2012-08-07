@@ -40,12 +40,4 @@
       </span>
     </form>
   </div>
-  <div class="span6">
-  </div>
-  <div class="span6">
-    <p>A dump of $settings</p>
-    <pre>
-      <%= dumper $settings =%>
-    </pre>
-  </div>
 </div>

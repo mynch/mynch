@@ -1,0 +1,50 @@
+% layout 'bootstrap', title 'Mynch';
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span4">
+      <div class="hero-unit">
+        <h2>Wallscreen</h2>
+        <p>
+          Non-interactive, clean, and suitable for a wallscreen
+          display.
+        </p>
+        <a href="/wallscreen" class="btn btn-primary btn-large">
+          Display wallscreen
+        </a>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="hero-unit">
+        <h2>Dashboard</h2>
+        <p>
+          An interactive frontend to your monitoring system.
+        </p>
+        <a href="/dashboard" class="btn btn-primary btn-large">
+          My personal dashboard
+        </a>
+      </div>
+    </div>
+    <div class="span4">
+      <div class="hero-unit">
+        <h2>Settings</h2>
+        <p>
+          Adjust settings. The hostgroup filter allows you to narrow
+          down your focus on the important things.
+        </p>
+        <a href="/settings" class="btn btn-primary btn-large">
+          Adjust settings
+        </a>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>
+      Designed and built with Mojolicious, Monitoring::Livestatus and
+      Twitter Boostrap.
+    </p>
+    <p>
+      Mynch is free software.
+    </p>
+  </footer>
+</div>

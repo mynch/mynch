@@ -19,7 +19,28 @@
       <form action="/settings/save_set">
         <input type="hidden" name="set" value="<%= $i %>" />
         <input name="label" type="text" class="span4" placeholder="label…" value="<%= $set->{label}%>"/>
-        <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" value="<%= join(', ', @{ $set->{hostgroups} } ) %>"/>
+
+      <div class="control-group">
+         <label class="control-label" for="hostgroups">Hostgroups</label>
+         <div class="controls">
+            <select multiple="multiple" name="hostgroups" id="hostgroups">
+              % HOSTGROUP: foreach my $hostgroup ( @{ $self->list_hostgroups() } ) {
+              %   my $hit = 0;
+              %   foreach my $selected_hostgroup ( @{ $set->{hostgroups} } ) {
+              %     if ($hostgroup eq $selected_hostgroup) {
+                      <option value="<%= $hostgroup %>" selected><%= $hostgroup %></option>
+              %       $hit = 1;
+              %       next HOSTGROUP;
+              %     }
+              %   }
+              %   if ($hit == 0) {
+                      <option value="<%= $hostgroup %>"><%= $hostgroup %></option>
+              %   }
+              % }
+            </select>
+        </div>
+      </div>
+
         <br/>
         <button type="submit" value="save" class="btn btn-info"><i class="icon icon-edit"></i>Save</button>
       </form>
@@ -36,24 +57,25 @@
     <form action="/settings/save_set">
       <input type="hidden" name="set" value="new" />
       <input name="label" type="text" class="span4" placeholder="label…" />
-      <input name="hostgroups" type="text" class="span4" placeholder="hostgroup, hostgroup, …" />
+      <div class="control-group">
+         <label class="control-label" for="hostgroups">Hostgroups</label>
+         <div class="controls">
+            <select multiple="multiple" name="hostgroups" id="hostgroups">
+              % foreach my $hostgroup ( @{ $self->list_hostgroups() } ) {
+                <option value="<%= $hostgroup %>"><%= $hostgroup %></option>
+              % }
+            </select>
+        </div>
+      </div>
       <button type="submit" value="add" class="btn btn-success"><i class="icon icon-edit"></i>Add set</button>
       <hr>
     </form>
     % }
-    <form action="/settings/clear_settings">
+    <form action="/settings/clear">
       <button type="submit" value="clear" class="btn btn-warning"><i class="icon icon-remove"></i>Clear</button>
       <span class="help-inline">
         Clear custom settings, and restore defaults.
       </span>
     </form>
-  </div>
-  <div class="span6">
-  </div>
-  <div class="span6">
-    <p>A dump of $settings</p>
-    <pre>
-      <%= dumper $settings =%>
-    </pre>
   </div>
 </div>
