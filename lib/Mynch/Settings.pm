@@ -25,17 +25,17 @@ sub save_set {
     my $label      = $self->param('label');
     my @hostgroups = $self->param('hostgroups');
 
-    my $hostgroups_ref = $self->wash_hostgroups(\@hostgroups);
+    my $hostgroups_ref = $self->wash_hostgroups( \@hostgroups );
 
-    if ( $label and scalar @{ $hostgroups_ref } ) {
+    if ( $label and scalar @{$hostgroups_ref} ) {
         my $set_data = {
             label      => $label,
             hostgroups => $hostgroups_ref
         };
 
-	$self->session->{settings}->{view} ||= [];
+        $self->session->{settings}->{view} ||= [];
 
-        if ($set eq 'new') {
+        if ( $set eq 'new' ) {
             push( @{ $self->session->{settings}->{view} }, $set_data );
             $self->flash( message => 'Added set' );
         }
@@ -45,7 +45,9 @@ sub save_set {
         }
     }
     else {
-        $self->flash( message => 'No set changed. No label, or no hostgroups (after washing)');
+        $self->flash( message =>
+                'No set changed. No label, or no hostgroups (after washing)'
+        );
     }
 
     $self->redirect_to('/settings');
@@ -87,18 +89,16 @@ sub clear {
 }
 
 sub wash_hostgroups {
-    my $self = shift;
+    my $self       = shift;
     my $hostgroups = shift;
 
-    my @candidate_hostgroups = @{ $hostgroups };
+    my @candidate_hostgroups = @{$hostgroups};
 
     my $live_hostgroups_ref = $self->list_hostgroups();
-    my @live_hostgroups = @{ $live_hostgroups_ref };
+    my @live_hostgroups     = @{$live_hostgroups_ref};
 
-    my @ok_hostgroups = eigenstates ( all ( any(@candidate_hostgroups),
-                                            any(@live_hostgroups)
-                                        )
-                                  );
+    my @ok_hostgroups = eigenstates(
+        all( any(@candidate_hostgroups), any(@live_hostgroups) ) );
 
     return \@ok_hostgroups;
 }
@@ -111,9 +111,9 @@ sub list_hostgroups {
     $query .= "GET hostgroups\n";
     $query .= "Columns: name\n";
 
-    my $results_ref = $ls->fetch( $query );
+    my $results_ref = $ls->fetch($query);
 
-    my @hostgroups = map { $_->[0] } @{ $results_ref };
+    my @hostgroups = map { $_->[0] } @{$results_ref};
 
     return \@hostgroups;
 }

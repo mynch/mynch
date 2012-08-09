@@ -3,19 +3,19 @@ use base qw(Test::Class);
 use Test::More;
 use Mynch::Livestatus;
 
-sub make_fixture :Test(setup) {
+sub make_fixture : Test(setup) {
     my $self = shift;
 
     my $ls = Mynch::Livestatus->new( server => 'localhost:6557' );
     $self->{ls} = $ls;
 }
 
-sub Object  :Test {
+sub Object : Test {
     local $TODO = "live currently unimplemented";
-};
+}
 
-sub Connect_to_livestatus :Test {
+sub Connect_to_livestatus : Test {
     local $TODO = "live currently unimplemented";
-};
+}
 
 1;

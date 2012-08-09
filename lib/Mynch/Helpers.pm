@@ -2,7 +2,7 @@ package Mynch::Helpers;
 
 use Time::Duration;
 use Date::Format;
-use Digest::SHA  qw(sha1_hex);
+use Digest::SHA qw(sha1_hex);
 
 use strict;
 use warnings;
@@ -14,10 +14,10 @@ sub register {
 
     $app->helper(
         abbr_datetime => sub {
-          my $self = shift;
-          my $time = shift;
+            my $self = shift;
+            my $time = shift;
 
-          return time2str("%h %d %R", $time);
+            return time2str( "%h %d %R", $time );
         }
     );
 
@@ -84,11 +84,15 @@ sub register {
                 3 => 'unknown',
             };
 
-            if ($host_states->{$hostgroup->{worst_host_state}} ne 'up' ) {
-                return $backgrounds->{$host_states->{$hostgroup->{worst_host_state}}};
+            if ( $host_states->{ $hostgroup->{worst_host_state} } ne 'up' ) {
+                return
+                    $backgrounds
+                    ->{ $host_states->{ $hostgroup->{worst_host_state} } };
             }
             else {
-                return $backgrounds->{$service_states->{$hostgroup->{worst_service_state}}};
+                return
+                    $backgrounds->{ $service_states
+                        ->{ $hostgroup->{worst_service_state} } };
             }
         }
     );
@@ -98,7 +102,7 @@ sub register {
             my $self           = shift;
             my $hostgroups_ref = shift;
 
-            my @hostgroups = @{ $hostgroups_ref };
+            my @hostgroups = @{$hostgroups_ref};
 
             my $service_weight = {
                 0 => 4,
@@ -115,9 +119,9 @@ sub register {
             };
 
             my @sorted = sort {
-                $b->{num_hosts_down} <=> $a->{num_hosts_down} ||
-                    $b->{num_services_crit} <=> $a->{num_services_crit} ||
-                    $b->{num_services_warn} <=> $a->{num_services_warn}
+                       $b->{num_hosts_down} <=> $a->{num_hosts_down}
+                    || $b->{num_services_crit} <=> $a->{num_services_crit}
+                    || $b->{num_services_warn} <=> $a->{num_services_warn}
             } @hostgroups;
 
             return @sorted;
@@ -129,7 +133,7 @@ sub register {
             my $self         = shift;
             my $services_ref = shift;
 
-            my @services = @{ $services_ref };
+            my @services = @{$services_ref};
 
             my $weight = {
                 0 => 4,
@@ -140,9 +144,9 @@ sub register {
             };
 
             my @sorted = sort {
-                $weight->{$a->{state}} <=> $weight->{$b->{state}} ||
-                    $a->{last_state_change} <=> $b->{last_state_change}
-                } @services;
+                       $weight->{ $a->{state} } <=> $weight->{ $b->{state} }
+                    || $a->{last_state_change} <=> $b->{last_state_change}
+            } @services;
 
             return @sorted;
         }
@@ -150,94 +154,130 @@ sub register {
 
     $app->helper(
         button_downtime => sub {
-            my $self  = shift;
+            my $self = shift;
 
-            my $html =
-  '<button class="btn btn-primary" '
-. 'onClick="$(\'#downtimemodal\').modal(\'show\');" '
-. 'type="button"><i class="icon-wrench"></i> Schedule downtime</button>';
+            my $html
+                = '<button class="btn btn-primary" '
+                . 'onClick="$(\'#downtimemodal\').modal(\'show\');" '
+                . 'type="button"><i class="icon-wrench"></i> Schedule downtime</button>';
             return $html;
         }
     );
 
     $app->helper(
         button_comment => sub {
-            my $self  = shift;
+            my $self = shift;
 
-            my $html =
-  '<button class="btn btn-primary" '
-. 'onClick="$(\'#commentmodal\').modal(\'show\');" '
-. 'type="button"><i class="icon-comment"></i> Add comment</button>';
+            my $html
+                = '<button class="btn btn-primary" '
+                . 'onClick="$(\'#commentmodal\').modal(\'show\');" '
+                . 'type="button"><i class="icon-comment"></i> Add comment</button>';
             return $html;
         }
     );
 
     $app->helper(
         button_recheck => sub {
-            my $self  = shift;
-            my $host = shift;
+            my $self    = shift;
+            my $host    = shift;
             my $service = shift;
-            my $id = sha1_hex($host . $service . "Recheck");
+            my $id      = sha1_hex( $host . $service . "Recheck" );
 
-            my $html =
-  '<button class="btn btn-mini" data-loading-text="rechecking..." id="' . $id . '" '
-. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Recheck", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
+            my $html
+                = '<button class="btn btn-mini" data-loading-text="rechecking..." id="'
+                . $id . '" '
+                . 'onClick=\'doajax( { host: "'
+                . $host
+                . '", service: "'
+                . $service
+                . '", submit: "Recheck", id: "'
+                . $id
+                . '" } );\' '
+                . 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
     );
 
     $app->helper(
         button_recheck_host => sub {
-            my $self  = shift;
+            my $self = shift;
             my $host = shift;
-            my $id = sha1_hex($host . "Recheck");
+            my $id   = sha1_hex( $host . "Recheck" );
 
-            my $html =
-  '<button class="btn btn-mini" data-loading-text="rechecking..." id="' . $id . '" '
-. 'onClick=\'doajax( { host: "' . $host . '", submit: "Recheck", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
+            my $html
+                = '<button class="btn btn-mini" data-loading-text="rechecking..." id="'
+                . $id . '" '
+                . 'onClick=\'doajax( { host: "'
+                . $host
+                . '", submit: "Recheck", id: "'
+                . $id
+                . '" } );\' '
+                . 'type="submit" name="submit" value="Recheck" alt="Recheck" title="Recheck"><i alt="Recheck" title="Recheck" class="icon-refresh"></i></button>';
             return $html;
         }
     );
 
     $app->helper(
         button_recheck_all => sub {
-            my $self  = shift;
-            my $host = shift;
+            my $self    = shift;
+            my $host    = shift;
             my $service = shift;
-            my $id = sha1_hex($host . "RecheckAll");
+            my $id      = sha1_hex( $host . "RecheckAll" );
 
-            my $html =
-  '<button class="btn btn-primary" data-loading-text="rechecking..." id="' . $id . '" '
-. 'onClick=\'doajax( { host: "' . $host . '", submit: "RecheckAll", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="RecheckAll" alt="Recheck" title="Recheck"><i alt="Recheck All" title="Recheck All" class="icon-refresh"></i> Recheck all</button>';
+            my $html
+                = '<button class="btn btn-primary" data-loading-text="rechecking..." id="'
+                . $id . '" '
+                . 'onClick=\'doajax( { host: "'
+                . $host
+                . '", submit: "RecheckAll", id: "'
+                . $id
+                . '" } );\' '
+                . 'type="submit" name="submit" value="RecheckAll" alt="Recheck" title="Recheck"><i alt="Recheck All" title="Recheck All" class="icon-refresh"></i> Recheck all</button>';
             return $html;
         }
     );
 
     $app->helper(
         button_acknowledge => sub {
-            my $self  = shift;
-            my $host = shift;
-            my $service = shift;
+            my $self         = shift;
+            my $host         = shift;
+            my $service      = shift;
             my $acknowledged = shift;
-            my $class = "btn btn-mini";
-            my $id = sha1_hex($host . $service . "Ack");
-            my $html = "";
+            my $class        = "btn btn-mini";
+            my $id           = sha1_hex( $host . $service . "Ack" );
+            my $html         = "";
 
-            if ($acknowledged == 1) {
-              $class .= " btn-success";
+            if ( $acknowledged == 1 ) {
+                $class .= " btn-success";
 
-              $html =
-  '<button class="' . $class . '" data-loading-text="unacking..." id="' . $id . '" ' 
-. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "UnAck", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="UnAck" alt="Unack" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
-            } else {
-              $html =
-  '<button class="' . $class . '" data-loading-text="acking..." id="' . $id . '" ' 
-. 'onClick=\'doajax( { host: "' . $host . '", service: "' . $service . '", submit: "Ack", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
+                $html
+                    = '<button class="'
+                    . $class
+                    . '" data-loading-text="unacking..." id="'
+                    . $id . '" '
+                    . 'onClick=\'doajax( { host: "'
+                    . $host
+                    . '", service: "'
+                    . $service
+                    . '", submit: "UnAck", id: "'
+                    . $id
+                    . '" } );\' '
+                    . 'type="submit" name="submit" value="UnAck" alt="Unack" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
+            }
+            else {
+                $html
+                    = '<button class="'
+                    . $class
+                    . '" data-loading-text="acking..." id="'
+                    . $id . '" '
+                    . 'onClick=\'doajax( { host: "'
+                    . $host
+                    . '", service: "'
+                    . $service
+                    . '", submit: "Ack", id: "'
+                    . $id
+                    . '" } );\' '
+                    . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             }
             return $html;
         }
@@ -245,25 +285,40 @@ sub register {
 
     $app->helper(
         button_acknowledge_host => sub {
-            my $self  = shift;
-            my $host = shift;
+            my $self         = shift;
+            my $host         = shift;
             my $acknowledged = shift;
-            my $class = "btn btn-mini";
-            my $id = sha1_hex($host . "Ack");
-            my $html = "";
+            my $class        = "btn btn-mini";
+            my $id           = sha1_hex( $host . "Ack" );
+            my $html         = "";
 
-            if ($acknowledged == 1) {
-              $class .= " btn-success";
+            if ( $acknowledged == 1 ) {
+                $class .= " btn-success";
 
-              $html =
-  '<button class="' . $class . '" data-loading-text="unacking..." id="' . $id . '" ' 
-. 'onClick=\'doajax( { host: "' . $host . '", submit: "UnAck", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="UnAck" alt="UnAck" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
-            } else {
-              $html =
-  '<button class="' . $class . '" data-loading-text="acking..." id="' . $id . '" ' 
-. 'onClick=\'doajax( { host: "' . $host . '", submit: "Ack", id: "' . $id . '" } );\' '
-. 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
+                $html
+                    = '<button class="'
+                    . $class
+                    . '" data-loading-text="unacking..." id="'
+                    . $id . '" '
+                    . 'onClick=\'doajax( { host: "'
+                    . $host
+                    . '", submit: "UnAck", id: "'
+                    . $id
+                    . '" } );\' '
+                    . 'type="submit" name="submit" value="UnAck" alt="UnAck" title="UnAck"><i alt="UnAck" title="UnAck" class="icon-ok"></i></button>';
+            }
+            else {
+                $html
+                    = '<button class="'
+                    . $class
+                    . '" data-loading-text="acking..." id="'
+                    . $id . '" '
+                    . 'onClick=\'doajax( { host: "'
+                    . $host
+                    . '", submit: "Ack", id: "'
+                    . $id
+                    . '" } );\' '
+                    . 'type="submit" name="submit" value="Ack" alt="Ack" title="Ack"><i alt="Ack" title="Ack" class="icon-ok"></i></button>';
             }
             return $html;
         }
@@ -271,15 +326,24 @@ sub register {
 
     $app->helper(
         button_delete_comment => sub {
-            my $self  = shift;
-            my $comment = shift;
+            my $self       = shift;
+            my $comment    = shift;
             my $is_service = shift;
-            my $id = sha1_hex($comment . "DelComment");
+            my $id         = sha1_hex( $comment . "DelComment" );
 
-            my $html =
-  '<button class="btn btn-mini" id="' . $id . '" '
-. 'onClick=\'doajax( { comment: "' . $comment . '", is_service: "' . $is_service . '", submit: "DelComment", id: "' . $id . '" } ); $("#comment' . $comment . '").remove()\' '
-. 'type="submit" name="submit" value="DelComment" alt="DelComment" title="DelComment"><i alt="DelComment" title="DelComment" class="icon-remove"></i></button>';
+            my $html
+                = '<button class="btn btn-mini" id="'
+                . $id . '" '
+                . 'onClick=\'doajax( { comment: "'
+                . $comment
+                . '", is_service: "'
+                . $is_service
+                . '", submit: "DelComment", id: "'
+                . $id
+                . '" } ); $("#comment'
+                . $comment
+                . '").remove()\' '
+                . 'type="submit" name="submit" value="DelComment" alt="DelComment" title="DelComment"><i alt="DelComment" title="DelComment" class="icon-remove"></i></button>';
             return $html;
         }
     );
@@ -355,9 +419,9 @@ sub register {
             my $attempt      = $attributes->{attempt};
             my $max_attempts = $attributes->{max_attempts};
 
-            # Rewrite state_type, if "0" or "1" (from "GET servicesbyhostgroup")
-            if    ($state_type eq "0") { $state_type = "SOFT"; }
-            elsif ($state_type eq "1") { $state_type = "HARD"; }
+          # Rewrite state_type, if "0" or "1" (from "GET servicesbyhostgroup")
+            if    ( $state_type eq "0" ) { $state_type = "SOFT"; }
+            elsif ( $state_type eq "1" ) { $state_type = "HARD"; }
 
             # Button content
             my $label = $states->{$state}->{label}->{$state_type};
@@ -365,13 +429,11 @@ sub register {
 
             # Extra text for SOFT non-OK entries
             if ( $state_type eq "SOFT" and $state ne '0' ) {
-                $text .= sprintf( "&nbsp;(%d/%d)",
-                                  $attempt, $max_attempts, );
+                $text .= sprintf( "&nbsp;(%d/%d)", $attempt, $max_attempts, );
             }
 
-            my $html =
-              sprintf( '<span class="label %s">%s</span>', $label, $text );
-
+            my $html = sprintf( '<span class="label %s">%s</span>', $label,
+                $text );
 
             return $html;
         }
@@ -413,8 +475,8 @@ sub register {
             my $max_attempts = $attributes->{max_attempts};
 
             # Rewrite state_type, if "0" or "1" (from "GET hosts")
-            if    ($state_type eq "0") { $state_type = "SOFT"; }
-            elsif ($state_type eq "1") { $state_type = "HARD"; }
+            if    ( $state_type eq "0" ) { $state_type = "SOFT"; }
+            elsif ( $state_type eq "1" ) { $state_type = "HARD"; }
 
             # Button content
             my $label = $states->{$state}->{label}->{$state_type};
@@ -422,18 +484,15 @@ sub register {
 
             # Extra text for SOFT non-UP entries
             if ( $state_type eq "SOFT" and $state ne '0' ) {
-                $text .= sprintf( "&nbsp;(%d/%d)",
-                                  $attempt, $max_attempts, );
+                $text .= sprintf( "&nbsp;(%d/%d)", $attempt, $max_attempts, );
             }
 
-            my $html =
-              sprintf( '<span class="label %s">%s</span>', $label, $text );
-
+            my $html = sprintf( '<span class="label %s">%s</span>', $label,
+                $text );
 
             return $html;
         }
     );
 }
-
 
 1;

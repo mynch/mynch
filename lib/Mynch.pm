@@ -35,27 +35,33 @@ sub startup {
         action     => 'main_page',
     );
 
-    $r->route('/wallscreen/hostgroup/:show_hostgroups')
-        ->to( controller => 'wallscreen', action => 'main_page', show_hostgroups => '' );
+    $r->route('/wallscreen/hostgroup/:show_hostgroups')->to(
+        controller      => 'wallscreen',
+        action          => 'main_page',
+        show_hostgroups => ''
+    );
 
     $r->route('/dashboard/:action')->to(
         controller => 'dashboard',
-        action => 'main_page'
+        action     => 'main_page'
     );
 
-    $r->route('/dashboard/hostgroup/:show_hostgroups')
-        ->to( controller => 'dashboard', action => 'main_page', show_hostgroups => '' );
+    $r->route('/dashboard/hostgroup/:show_hostgroups')->to(
+        controller      => 'dashboard',
+        action          => 'main_page',
+        show_hostgroups => ''
+    );
 
     $r->route('/dashboard/host/#show_host')->to(
         controller => 'dashboard',
-        action => 'host',
-        show_host => ''
+        action     => 'host',
+        show_host  => ''
     );
 
     $r->route('/dashboard/service/#show_host/#show_service')->to(
-        controller => 'dashboard',
-        action => 'service',
-        show_host => '',
+        controller   => 'dashboard',
+        action       => 'service',
+        show_host    => '',
         show_service => ''
     );
 
