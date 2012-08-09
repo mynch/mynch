@@ -1,3 +1,9 @@
+* Documentation
+** Write proper documentation
+** Install
+** Test
+** Contribute
+
 * View
 ** Settings
 
@@ -11,7 +17,7 @@
 
      Do not retrieve more than we need.
 
-**** Group hostgroups according to setting
+**** DONE Group hostgroups according to setting
 
      Pivot on view_group?  Add helper for this.
 
@@ -44,9 +50,12 @@
 
 *** Actions
 
-**** Interface
+**** TODO Interface
 
      - Go to nagios / icinga page for this host
+
+       - When you have several icinga servers, we need to add origin
+         server to the data structure.
 
      - Ignore service / host / hostgroup
 
@@ -58,7 +67,7 @@
 
        - until comment change
 
-**** Integration with icinga / nagios
+**** DONE Integration with icinga / nagios
 
      - Comment
 
@@ -69,11 +78,23 @@
      - Submit result
 
 * Code
-** TODO Remove non-distributable code
-   Example: "os updates" filters
 
 ** TODO Make a "Reports" plugin
    The "migration" report is highly site specific.
+
+** TODO Ignore hostgroup, host, host+service
+
+   Until unignored?
+
+   Until state changes.
+
+** TODO Rewrite mk-livestatus configuration
+
+   We need more configuration items per data source.
+   "icinga/nagios-uri" for instance.
+
+** DONE Remove non-distributable code
+   Example: "os updates" filters
 
 ** DONE Quantum::Superposition
    Adds "any" and "all" operators. Useful.
@@ -84,15 +105,6 @@
 ** DONE Add more sources
 
    Several icinga servers...
-
-
-** TODO Will the data structures change?
-
-** TODO Ignore hostgroup, host, host+service
-
-   Until unignored?
-
-   Until state changes.
 
 * Test
 
