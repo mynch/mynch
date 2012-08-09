@@ -1,5 +1,4 @@
-# -*- perl -*-
-
+# Copyright: 2012 Erik Inge Bolsø <knan@redpill-linpro.com>
 # Copyright: 2012 Stig Sandbeck Mathisen <ssm@redpill-linpro.com>
 #
 # This file is part of Mynch.
@@ -17,12 +16,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Mynch.  If not, see <http://www.gnu.org/licenses/>.
 
-use Test::More tests => 1;
+package Mynch::Dashboard::Tests;
+use base qw(Mynch::Tests);
 
-my $ok;
-END { BAIL_OUT "Could not load all modules" unless $ok }
-use Mynch;
-use List::MoreUtils;
-use Monitoring::Livestatus;
-ok 1, 'All modules loaded successfully';
-$ok = 1;
+sub Load_dashboard_page : Test(2) {
+    my $fixture = shift;
+    $fixture->{mojo}->get_ok('/dashboard')->status_is(200);
+}
+
+1;

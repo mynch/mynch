@@ -1,7 +1,21 @@
+%# Copyright: 2012 Erik Inge Bolsø <knan@redpill-linpro.com>
+%#
+%# This file is part of Mynch.
+%#
+%# Mynch is free software: you can redistribute it and/or modify
+%# it under the terms of the GNU General Public License as published by
+%# the Free Software Foundation, either version 3 of the License, or
+%# (at your option) any later version.
+%#
+%# Mynch is distributed in the hope that it will be useful,
+%# but WITHOUT ANY WARRANTY; without even the implied warranty of
+%# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%# GNU General Public License for more details.
+%#
+%# You should have received a copy of the GNU General Public License
+%# along with Mynch.  If not, see <http://www.gnu.org/licenses/>.
+
 % layout 'bootstrap', title 'Mynch';
-% content_for header => begin
-<meta http-equiv="Refresh" content="30" />
-% end
 
 <div class="container-fluid">
   <div class="row-fluid">
@@ -50,7 +64,7 @@
               <a href="/dashboard/host/<%= $service->{host_name} %>"><%= $service->{host_name} %></a>
             </td>
             <td>
-              %= $service->{display_name}
+              <a href="/dashboard/service/<%= $service->{host_name}%>/<%= $service->{display_name} %>"><%= $service->{display_name} %></a>
             </td>
           </tr>
           <tr>
@@ -158,8 +172,15 @@
 function init()
 {
   $("form").on("submit", false)
+  setTimeout( reloadPage, 30000);
 }
 window.onload=init;
+
+function reloadPage()  {
+    if( $('#refresh').is(':checked') ) {
+      window.location.reload();
+    }
+}
 
 function doajax( params )
 {

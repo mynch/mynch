@@ -1,5 +1,3 @@
-# -*- perl -*-
-
 # Copyright: 2012 Stig Sandbeck Mathisen <ssm@redpill-linpro.com>
 #
 # This file is part of Mynch.
@@ -17,12 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with Mynch.  If not, see <http://www.gnu.org/licenses/>.
 
-use Test::More tests => 1;
+package Mynch::Settings::Tests;
+use base qw(Mynch::Tests);
 
-my $ok;
-END { BAIL_OUT "Could not load all modules" unless $ok }
-use Mynch;
-use List::MoreUtils;
-use Monitoring::Livestatus;
-ok 1, 'All modules loaded successfully';
-$ok = 1;
+sub Load_settings_page : Test(2) {
+    my $fixture = shift;
+    $fixture->{mojo}->get_ok('/settings')->status_is(200);
+}
+
+sub Load_edit_settings_page : Test(2) {
+    my $fixture = shift;
+    $fixture->{mojo}->get_ok('/settings/edit')->status_is(200);
+}
+
+1;
