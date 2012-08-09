@@ -19,8 +19,10 @@
 
 use Test::More tests => 1;
 
-BEGIN {
-  use_ok ('Mynch')
-    or
-  BAIL_OUT( $@ );
-}
+my $ok;
+END { BAIL_OUT "Could not load all modules" unless $ok }
+use Mynch;
+use List::MoreUtils;
+use Monitoring::Livestatus;
+ok 1, 'All modules loaded successfully';
+$ok = 1;
