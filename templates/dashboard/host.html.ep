@@ -249,7 +249,7 @@
               %= duration $log_entry->{time}
             </td>
             <td>
-              %= $log_entry->{service_description}
+              <a href="/dashboard/service/<%= $log_entry->{host_name}%>/<%= $log_entry->{current_service_display_name} %>"><%= $log_entry->{current_service_display_name} %></a>
             </td>
           </tr>
           % }

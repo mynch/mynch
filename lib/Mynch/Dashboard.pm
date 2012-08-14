@@ -36,7 +36,7 @@ method log_data {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
@@ -62,7 +62,7 @@ method log_data_host {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
@@ -87,7 +87,7 @@ method log_data_service {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
