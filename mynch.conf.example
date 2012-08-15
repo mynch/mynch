@@ -8,6 +8,9 @@
 # Keys:
 #
 # "ml": Parameters for Monitoring::Livestatus->new()
+#       can be split into two named sets of parameters, "read" and "write" if you need this (for mirrored ack/comment status, etc)
+#
+# "htmurl" and "cgiurl", same meaning as in nagios/icinga setup
 #
 # "secret": Used by mojolicious to sign the session cookie
 #
@@ -29,16 +32,41 @@
         'hide-hostgroups' => [ 'hide-me', 'hide-me-too' ],
     },
 
+    htmurl => 'http://nagios.example.org/icinga/',
+    cgiurl => 'http://nagios.example.org/icinga/cgi-bin/',
+
+# easy config
     ml => {
         peer => [
-            {
-                name => 'local mk-livestatus socket',
-                peer => '/var/lib/icinga/rw/livestatus'
-            },
             {
                 name => 'remote mk-livestatus socket',
                 peer => 'nagios.example.org:6557'
             },
         ]
     },
+
+# complex config, split in read and write
+#    ml => {
+#        read => {
+#            peer => [
+#                {
+#                    name => 'remote mk-livestatus socket',
+#                    peer => 'nagios.example.org:6557',
+#                },
+#            ]
+#        },
+#        write => {
+#            peer => [
+#                {
+#                    name => 'remote mk-livestatus socket',
+#                    peer => 'nagios.example.org:6557',
+#                },
+#                {
+#                    name => 'secondary icinga',
+#                    peer => 'icinga-failover.example.org:6558',
+#                },
+#            ]
+#        }
+#    },
+
 };
