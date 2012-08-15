@@ -20,7 +20,6 @@ package Mynch::Dashboard;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use Mynch::Config;
-use List::MoreUtils qw{ uniq };
 use Method::Signatures;
 use Time::Local;
 
