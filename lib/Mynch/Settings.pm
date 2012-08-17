@@ -37,7 +37,7 @@ method save_set {
     my $label      = $self->param('label');
     my @hostgroups = $self->param('hostgroups');
 
-    my $hostgroups_ref = $self->wash_hostgroups( hostgroups => \@hostgroups );
+    my $hostgroups_ref = $self->wash_hostgroups( \@hostgroups );
 
     if ( $label and scalar @{$hostgroups_ref} ) {
         my $set_data = {
