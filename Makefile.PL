@@ -15,6 +15,7 @@ WriteMakefile(
         'Quantum::Superpositions' => '0',
         'Test::Class'             => '0',
         'Time::Duration'          => '0',
+        'URI::Escape'             => '0',
     },
     test      => {TESTS => 't/*.t'}
 );

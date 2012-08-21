@@ -21,6 +21,7 @@ package Mynch::Helpers;
 use Time::Duration;
 use Date::Format;
 use Digest::SHA qw(sha1_hex);
+use URI::Escape;
 
 use strict;
 use warnings;
@@ -362,6 +363,39 @@ sub register {
                 . $comment
                 . '").remove()\' '
                 . 'type="submit" name="submit" value="DelComment" alt="DelComment" title="DelComment"><i alt="DelComment" title="DelComment" class="icon-remove"></i></button>';
+            return $html;
+        }
+    );
+
+    $app->helper(
+        link_extinfo => sub {
+            my $self 	= shift;
+            my $host    = shift;
+            my $service = shift;
+
+            my $html;
+
+            if ($service) {
+                $html
+                = '<li>'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=2&'
+                . 'host=' . $host
+                . '&service=' . uri_escape($service)
+                . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page for '. $service . " at " . $host . '</a>'
+                . '</li>'
+            }
+            else
+            {
+                $html
+                = '<li>'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=1&'
+                . 'host=' . $host . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page for '. $host . '</a>'
+                . '</li>'
+            }
             return $html;
         }
     );

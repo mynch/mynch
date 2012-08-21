@@ -48,9 +48,16 @@
         <div class="span7">
          %= $entry->{plugin_output}
         </div>
-        <div class="span12">
-         %= $entry->{long_plugin_output}
-        </div>
+        % if ($entry->{long_plugin_output}) {
+          <div class="span12">
+           %= $entry->{long_plugin_output}
+          </div>
+        % }
+      </div>
+      <div class="row-fluid">
+        <div class="span12"><ul class="nav nav-list">
+         %== link_extinfo($self->stash->{show_host}, $self->stash->{show_service})
+        </ul></div>
       </div>
     </div>
     <div class="span4">
