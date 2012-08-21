@@ -21,6 +21,7 @@ package Mynch::Helpers;
 use Time::Duration;
 use Date::Format;
 use Digest::SHA qw(sha1_hex);
+use URI::Escape;
 
 use strict;
 use warnings;
@@ -375,6 +376,15 @@ sub register {
             my $html;
 
             if ($service) {
+                $html
+                = '<li>'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=2&'
+                . 'host=' . $host
+                . '&service=' . uri_escape($service)
+                . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page for '. $service . " at " . $host . '</a>'
+                . '</li>'
             }
             else
             {
