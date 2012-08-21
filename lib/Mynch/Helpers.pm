@@ -367,6 +367,30 @@ sub register {
     );
 
     $app->helper(
+        link_extinfo => sub {
+            my $self 	= shift;
+            my $host    = shift;
+            my $service = shift;
+
+            my $html;
+
+            if ($service) {
+            }
+            else
+            {
+                $html
+                = '<li>'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=1&'
+                . 'host=' . $host . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page for '. $host . '</a>'
+                . '</li>'
+            }
+            return $html;
+        }
+    );
+
+    $app->helper(
         format_state => sub {
             my $self  = shift;
             my $state = shift;

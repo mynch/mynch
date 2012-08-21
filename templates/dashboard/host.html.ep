@@ -49,6 +49,11 @@
          %= $entry->{plugin_output}
         </div>
       </div>
+      <div class="row-fluid">
+        <div class="span12"><ul class="nav nav-list">
+         %== link_extinfo($self->stash->{show_host})
+        </ul></div>
+      </div>
     </div>
     <div class="span4">
       
