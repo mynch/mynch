@@ -377,25 +377,61 @@ sub register {
 
             if ($service) {
                 $html
-                = '<li>'
+                = '<li class="span4">'
                 . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=2&'
                 . 'host=' . $host
                 . '&service=' . uri_escape($service)
                 . '">'
                 . '<i class="icon-eye-open"></i>' . "\n"
-                . 'Nagios/Icinga page for '. $service . " at " . $host . '</a>'
+                . 'Nagios/Icinga page</a>'
                 . '</li>'
             }
             else
             {
                 $html
-                = '<li>'
+                = '<li class="span4">'
                 . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=1&'
                 . 'host=' . $host . '">'
                 . '<i class="icon-eye-open"></i>' . "\n"
-                . 'Nagios/Icinga page for '. $host . '</a>'
+                . 'Nagios/Icinga page</a>'
                 . '</li>'
             }
+            return $html;
+        }
+    );
+
+    $app->helper(
+        link_notesurl => sub {
+            my $self 	= shift;
+            my $url     = shift;
+
+            return unless $url;
+
+            my $html
+                = '<li class="span4">'
+                . '<a href="' . $url . '">'
+                . '<i class="icon-file"></i>' . "\n"
+                . 'Extra Notes</a>'
+                . '</li>';
+
+            return $html;
+        }
+    );
+
+    $app->helper(
+        link_actionurl => sub {
+            my $self 	= shift;
+            my $url     = shift;
+
+            return unless $url;
+
+            my $html
+                = '<li class="span4">'
+                . '<a href="' . $url . '">'
+                . '<i class="icon-cogs"></i>' . "\n"
+                . 'Extra Actions</a>'
+                . '</li>';
+
             return $html;
         }
     );

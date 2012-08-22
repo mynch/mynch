@@ -108,7 +108,7 @@ method host_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns
-        = qw{ acknowledged current_attempt display_name groups is_flapping last_check last_hard_state last_hard_state_change last_notification last_state last_state_change last_time_down last_time_unreachable last_time_up long_plugin_output max_check_attempts name next_check next_notification notes notes_expanded notes_url notes_url_expanded num_services num_services_crit num_services_hard_crit num_services_hard_ok num_services_hard_unknown num_services_hard_warn num_services_ok num_services_pending num_services_unknown num_services_warn perf_data plugin_output scheduled_downtime_depth state state_type total_services worst_service_hard_state worst_service_state };
+        = qw{ acknowledged action_url_expanded current_attempt display_name groups is_flapping last_check last_hard_state last_hard_state_change last_notification last_state last_state_change last_time_down last_time_unreachable last_time_up long_plugin_output max_check_attempts name next_check next_notification notes_expanded notes_url_expanded plugin_output scheduled_downtime_depth state state_type };
 
     my $query;
     $query .= "GET hosts\n";
@@ -205,7 +205,8 @@ method service_detail_data {
         state_type acknowledged downtimes last_state_change
         last_hard_state_change last_check next_check
         last_notification current_attempt max_check_attempts
-        plugin_output long_plugin_output };
+        plugin_output long_plugin_output notes_expanded
+        notes_url_expanded action_url_expanded };
 
     my $query;
     $query .= "GET services\n";
