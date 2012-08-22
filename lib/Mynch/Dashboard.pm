@@ -205,7 +205,8 @@ method service_detail_data {
         state_type acknowledged downtimes last_state_change
         last_hard_state_change last_check next_check
         last_notification current_attempt max_check_attempts
-        plugin_output long_plugin_output };
+        plugin_output long_plugin_output notes_expanded
+        notes_url_expanded action_url_expanded };
 
     my $query;
     $query .= "GET services\n";
