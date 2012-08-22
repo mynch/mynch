@@ -319,7 +319,7 @@ sub dostuff {
     my $referrer = $self->req->headers->referrer;
 
     my $notify = 1;                                    # FIXME: adjustable
-    my $nick = $ENV{'REMOTE_USER'} || "vaktsmurfen";
+    my $nick = $self->req->env->{REMOTE_USER} || "vaktsmurfen";
 
     my $now = time();
 
