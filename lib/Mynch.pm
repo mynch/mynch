@@ -43,6 +43,9 @@ sub startup {
         }
     }
 
+    # Session lifetime (1 year)
+    $self->sessions->default_expiration(31536000);
+
     # Router
     my $r = $self->routes;
 
