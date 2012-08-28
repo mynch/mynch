@@ -88,10 +88,6 @@ sub startup {
         action     => 'settings_page',
     );
 
-    $r->route('/reports')->to( controller => 'reports', action => 'index' );
-    $r->route('/report/migration')
-        ->to( controller => 'reports', action => 'migration_report' );
-
 }
 
 1;

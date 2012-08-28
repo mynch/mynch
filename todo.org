@@ -79,9 +79,6 @@
 
 * Code
 
-** TODO Make a "Reports" plugin
-   The "migration" report is highly site specific.
-
 ** TODO Ignore hostgroup, host, host+service
 
    Until unignored?
