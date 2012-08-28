@@ -559,8 +559,8 @@ sub register {
             # Unwrap, for readability
             my $state_type   = $attributes->{state_type};
             my $state        = $attributes->{state};
-            my $attempt      = $attributes->{attempt};
-            my $max_attempts = $attributes->{max_attempts};
+            my $attempt      = $attributes->{current_attempt} ;
+            my $max_attempts = $attributes->{max_check_attempts};
 
             # Rewrite state_type, if "0" or "1" (from "GET hosts")
             if    ( $state_type eq "0" ) { $state_type = "SOFT"; }
