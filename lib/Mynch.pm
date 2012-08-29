@@ -91,6 +91,33 @@ sub startup {
         action     => 'settings_page',
     );
 
+    $self->defaults( user => 'vaktsmurfen' );
+
+    $self->hook(before_dispatch => \&get_user);
+}
+
+sub get_user {
+    my $c = shift;
+    my $config = $c->config;
+
+    if ($config->{'user'} and $config->{'user'}->{'auth'} eq "header")
+    {
+      my $header = $config->{'user'}->{'header'};
+      if ($header)
+      {
+        if ($c->req->headers->header($header))
+        {
+          my $user = $c->req->headers->header($header);
+          $c->stash( user => $user );
+        }
+      }
+    }
+    else # default = REMOTE_USER
+    {
+      if ($c->req->env->{REMOTE_USER}) {
+        $c->stash( user => $c->req->env->{REMOTE_USER});
+      }
+    }
 }
 
 1;

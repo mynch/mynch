@@ -16,6 +16,8 @@
 #
 # "plugins": Used to load other mojo plugins.
 #
+# "user": User setup, subkeys "auth" for authentication method (header or cgi) and "header" to specify which header to read
+#
 # "filters": Suppression filters for various screens, 'service-noise' suppresses noisy services in wallscreen and dashboard,
 #   'hide-hostgroups' is intended for hiding all-encompassing hostgroups and such
 
@@ -23,6 +25,8 @@
     secret => '7f007b50-e7ed-49be-884a-6f1924e69515',
 
     plugins => [ { name => 'PODRenderer', } ],
+
+    user => { auth => 'header', header => 'X-Remote-User' },
 
     filters => {
         'service-noise' => [
