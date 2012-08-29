@@ -21,6 +21,7 @@ package Mynch::Helpers;
 use Time::Duration;
 use Date::Format;
 use Digest::SHA qw(sha1_hex);
+use URI::Escape;
 
 use strict;
 use warnings;
@@ -367,6 +368,75 @@ sub register {
     );
 
     $app->helper(
+        link_extinfo => sub {
+            my $self 	= shift;
+            my $host    = shift;
+            my $service = shift;
+
+            my $html;
+
+            if ($service) {
+                $html
+                = '<li class="span4">'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=2&'
+                . 'host=' . $host
+                . '&service=' . uri_escape($service)
+                . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page</a>'
+                . '</li>'
+            }
+            else
+            {
+                $html
+                = '<li class="span4">'
+                . '<a href="' . $self->config->{cgiurl} . 'extinfo.cgi?type=1&'
+                . 'host=' . $host . '">'
+                . '<i class="icon-eye-open"></i>' . "\n"
+                . 'Nagios/Icinga page</a>'
+                . '</li>'
+            }
+            return $html;
+        }
+    );
+
+    $app->helper(
+        link_notesurl => sub {
+            my $self 	= shift;
+            my $url     = shift;
+
+            return unless $url;
+
+            my $html
+                = '<li class="span4">'
+                . '<a href="' . $url . '">'
+                . '<i class="icon-file"></i>' . "\n"
+                . 'Extra Notes</a>'
+                . '</li>';
+
+            return $html;
+        }
+    );
+
+    $app->helper(
+        link_actionurl => sub {
+            my $self 	= shift;
+            my $url     = shift;
+
+            return unless $url;
+
+            my $html
+                = '<li class="span4">'
+                . '<a href="' . $url . '">'
+                . '<i class="icon-cogs"></i>' . "\n"
+                . 'Extra Actions</a>'
+                . '</li>';
+
+            return $html;
+        }
+    );
+
+    $app->helper(
         format_state => sub {
             my $self  = shift;
             my $state = shift;
@@ -489,8 +559,8 @@ sub register {
             # Unwrap, for readability
             my $state_type   = $attributes->{state_type};
             my $state        = $attributes->{state};
-            my $attempt      = $attributes->{attempt};
-            my $max_attempts = $attributes->{max_attempts};
+            my $attempt      = $attributes->{current_attempt} ;
+            my $max_attempts = $attributes->{max_check_attempts};
 
             # Rewrite state_type, if "0" or "1" (from "GET hosts")
             if    ( $state_type eq "0" ) { $state_type = "SOFT"; }

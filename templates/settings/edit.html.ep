@@ -31,8 +31,10 @@
 </div>
 <div class="row-fluid">
       % my $i = 0;
+      % my %labels;
       % if ($settings->{view}) {
       % foreach my $set ( @{ $settings->{view} } ) {
+      %   $labels{$set->{label}} = 1;
    <div class="span4">
       <form action="/settings/save_set">
         <input type="hidden" name="set" value="<%= $i %>" />
@@ -71,10 +73,13 @@
       % }
       % }
     % if ( $i < 3 ) {
+    %   my $newlabel = "primary";
+    %   if ($labels{"primary"}) { $newlabel = "secondary"; }
+    %   if ($labels{"secondary"}) { $newlabel = "ternary"; }
    <div class="span4">
     <form action="/settings/save_set">
       <input type="hidden" name="set" value="new" />
-      <input name="label" type="text" class="span4" placeholder="label…" />
+      <input name="label" type="text" class="span4" value="<%= $newlabel %>" />
       <div class="control-group">
          <label class="control-label" for="hostgroups">Hostgroups</label>
          <div class="controls">

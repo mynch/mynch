@@ -43,6 +43,9 @@ sub startup {
         }
     }
 
+    # Session lifetime (1 year)
+    $self->sessions->default_expiration(31536000);
+
     # Router
     my $r = $self->routes;
 
@@ -87,10 +90,6 @@ sub startup {
         controller => 'settings',
         action     => 'settings_page',
     );
-
-    $r->route('/reports')->to( controller => 'reports', action => 'index' );
-    $r->route('/report/migration')
-        ->to( controller => 'reports', action => 'migration_report' );
 
 }
 

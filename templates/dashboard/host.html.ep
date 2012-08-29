@@ -49,6 +49,13 @@
          %= $entry->{plugin_output}
         </div>
       </div>
+      <div class="row-fluid">
+        <div class="span12"><ul class="nav nav-list">
+         %== link_extinfo($self->stash->{show_host})
+         %== link_notesurl($entry->{notes_url_expanded}) if $entry->{notes_url_expanded}
+         %== link_actionurl($entry->{action_url_expanded}) if $entry->{action_url_expanded}
+        </ul></div>
+      </div>
     </div>
     <div class="span4">
       
@@ -83,6 +90,13 @@
           % }
         % }
       </div>
+
+      % if ($entry->{notes_expanded}) {
+      <div class="alert alert-block alert-info" id="hostnotes">
+        <h4 class="alert-heading"><i class="icon-file"></i> Host notes</h4>
+        %== $entry->{notes_expanded}
+      </div>
+      % }
 
       % if (scalar @{ $self->stash->{host_comments} } > 0) {
       <div class="alert alert-block alert-info" id="hostcomment">
@@ -249,7 +263,7 @@
               %= duration $log_entry->{time}
             </td>
             <td>
-              %= $log_entry->{service_description}
+              <a href="/dashboard/service/<%= $log_entry->{host_name}%>/<%= $log_entry->{current_service_display_name} %>"><%= $log_entry->{current_service_display_name} %></a>
             </td>
           </tr>
           % }

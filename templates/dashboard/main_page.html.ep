@@ -111,10 +111,10 @@
               %= duration $log_entry->{time}
             </td>
             <td>
-              %= $log_entry->{host_name}
+              <a href="/dashboard/host/<%= $log_entry->{host_name}%>"><%= $log_entry->{host_name} %></a>
             </td>
             <td>
-              %= $log_entry->{service_description}
+              <a href="/dashboard/service/<%= $log_entry->{host_name}%>/<%= $log_entry->{current_service_display_name} %>"><%= $log_entry->{current_service_display_name} %></a>
             </td>
           </tr>
           % }
@@ -141,7 +141,7 @@
         <tbody>
           % foreach my $hostgroup ( hostgroup_sort ( $hostgroups ) ) {
           <tr>
-            <td><%= $hostgroup->{name} %></td>
+            <td><a href="/dashboard/hostgroup/<%= $hostgroup->{name} %>"><%= $hostgroup->{name} %></a></td>
             <td>
               % if ($hostgroup->{num_hosts_unreach} ne "0") {
               <span class="badge badge-warning"><%= $hostgroup->{num_hosts_unreach} %></span>

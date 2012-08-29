@@ -26,6 +26,7 @@ For the Mynch instance, you need the following Perl modules:
 * Mojolicious >= 2.82
 * Monitoring::Livestatus
 * Quantum::Superpositions
+* URI::Escape
 
 To run the tests, you also need:
 * Test::Class

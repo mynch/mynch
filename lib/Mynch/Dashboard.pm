@@ -20,7 +20,6 @@ package Mynch::Dashboard;
 use Mojo::Base 'Mojolicious::Controller';
 use Mynch::Livestatus;
 use Mynch::Config;
-use List::MoreUtils qw{ uniq };
 use Method::Signatures;
 use Time::Local;
 
@@ -36,7 +35,7 @@ method log_data {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
@@ -62,7 +61,7 @@ method log_data_host {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
@@ -87,7 +86,7 @@ method log_data_service {
 
     my @columns = qw{ type time state state_type host_name
         service_description attempt
-        current_service_max_check_attempts };
+        current_service_max_check_attempts current_service_display_name };
 
     my $query;
     $query .= "GET log\n";
@@ -109,7 +108,7 @@ method host_data {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns
-        = qw{ acknowledged current_attempt display_name groups is_flapping last_check last_hard_state last_hard_state_change last_notification last_state last_state_change last_time_down last_time_unreachable last_time_up long_plugin_output max_check_attempts name next_check next_notification notes notes_expanded notes_url notes_url_expanded num_services num_services_crit num_services_hard_crit num_services_hard_ok num_services_hard_unknown num_services_hard_warn num_services_ok num_services_pending num_services_unknown num_services_warn perf_data plugin_output scheduled_downtime_depth state state_type total_services worst_service_hard_state worst_service_state };
+        = qw{ acknowledged action_url_expanded current_attempt display_name groups is_flapping last_check last_hard_state last_hard_state_change last_notification last_state last_state_change last_time_down last_time_unreachable last_time_up long_plugin_output max_check_attempts name next_check next_notification notes_expanded notes_url_expanded plugin_output scheduled_downtime_depth state state_type };
 
     my $query;
     $query .= "GET hosts\n";
@@ -206,7 +205,8 @@ method service_detail_data {
         state_type acknowledged downtimes last_state_change
         last_hard_state_change last_check next_check
         last_notification current_attempt max_check_attempts
-        plugin_output long_plugin_output };
+        plugin_output long_plugin_output notes_expanded
+        notes_url_expanded action_url_expanded };
 
     my $query;
     $query .= "GET services\n";
@@ -319,7 +319,7 @@ sub dostuff {
     my $referrer = $self->req->headers->referrer;
 
     my $notify = 1;                                    # FIXME: adjustable
-    my $nick = $ENV{'REMOTE_USER'} || "vaktsmurfen";
+    my $nick = $self->req->env->{REMOTE_USER} || "vaktsmurfen";
 
     my $now = time();
 

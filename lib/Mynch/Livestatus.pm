@@ -23,17 +23,30 @@ use Monitoring::Livestatus;
 use Method::Signatures;
 use Contextual::Return;
 
-method connect {
+method connect( Str :$readwrite ) {
     my $config_ref = $self->{config};
     my %config     = %{$config_ref};
-
-    my $conn = Monitoring::Livestatus->new(%config);
+    my $conn;
+    if (exists $config{'read'} and exists $config{'write'})
+    {
+      if ($readwrite eq "READ") {
+          $conn = Monitoring::Livestatus->new(%{ $config{'read'} });
+      }
+      elsif ($readwrite eq "WRITE")
+      {
+          $conn = Monitoring::Livestatus->new(%{ $config{'write'} });
+      }
+    }
+    else
+    {
+        $conn = Monitoring::Livestatus->new(%config);
+    }
 
     return $conn;
 }
 
 method fetch( Str $query) {
-    my $conn = $self->connect;
+    my $conn = $self->connect (readwrite => 'READ');
 
     my $results_ref = $conn->selectall_arrayref($query);
 
@@ -43,7 +56,7 @@ method fetch( Str $query) {
 }
 
 method send_commands( Str $commands) {
-    my $conn = $self->connect;
+    my $conn = $self->connect (readwrite => 'WRITE');
 
     my @messages = split( /\n/, $commands );
     foreach my $line (@messages) {

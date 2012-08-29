@@ -22,23 +22,17 @@ use Mynch::Livestatus;
 use Quantum::Superpositions;
 use Method::Signatures;
 
-sub settings_page {
-    my $self = shift;
-
+method settings_page {
     $self->stash( settings => $self->session->{settings} );
     $self->render;
 }
 
-sub edit {
-    my $self = shift;
-
+method edit {
     $self->stash( settings => $self->session->{settings} );
     $self->render;
 }
 
-sub save_set {
-    my $self = shift;
-
+method save_set {
     my $set        = $self->param('set');
     my $label      = $self->param('label');
     my @hostgroups = $self->param('hostgroups');
@@ -71,9 +65,7 @@ sub save_set {
     $self->redirect_to('/settings');
 }
 
-sub delete_set {
-    my $self = shift;
-
+method delete_set {
     my $set = $self->param('set');
 
     my $length = 1;    # Used for splicing
@@ -97,19 +89,13 @@ sub delete_set {
 
 }
 
-sub clear {
-    my $self = shift;
-
+method clear {
     $self->flash( message => 'settings reverted to default' );
     $self->session( expires => 1 );
     $self->redirect_to('/settings');
-
 }
 
-sub wash_hostgroups {
-    my $self       = shift;
-    my $hostgroups = shift;
-
+method wash_hostgroups ( ArrayRef $hostgroups ) {
     my @candidate_hostgroups = @{$hostgroups};
 
     my $live_hostgroups_ref = $self->list_hostgroups();
@@ -121,8 +107,7 @@ sub wash_hostgroups {
     return \@ok_hostgroups;
 }
 
-sub list_hostgroups {
-    my $self = shift;
+method list_hostgroups {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my $query;
