@@ -20,10 +20,10 @@ package Mynch;
 use Mojo::Base 'Mojolicious';
 
 use Mynch::Helpers;
+use Method::Signatures;
 
 # This method will run once at server start
-sub startup {
-    my $self = shift;
+method startup {
 
     # Plugins
     $self->plugin('Mynch::Helpers');
@@ -93,30 +93,27 @@ sub startup {
 
     $self->defaults( user => 'vaktsmurfen' );
 
-    $self->hook(before_dispatch => \&get_user);
+    $self->hook( before_dispatch => \&get_user );
 }
 
-sub get_user {
-    my $c = shift;
-    my $config = $c->config;
+method get_user {
+    my $config = $self->config;
 
-    if ($config->{'user'} and $config->{'user'}->{'auth'} eq "header")
-    {
-      my $header = $config->{'user'}->{'header'};
-      if ($header)
-      {
-        if ($c->req->headers->header($header))
-        {
-          my $user = $c->req->headers->header($header);
-          $c->stash( user => $user );
+    if ( $config->{'user'} and $config->{'user'}->{'auth'} eq "header" ) {
+        my $header = $config->{'user'}->{'header'};
+        if ($header) {
+            if ( $self->req->headers->header($header) ) {
+                my $user = $self->req->headers->header($header);
+                $self->stash( user => $user );
+            }
         }
-      }
     }
-    else # default = REMOTE_USER
-    {
-      if ($c->req->env->{REMOTE_USER}) {
-        $c->stash( user => $c->req->env->{REMOTE_USER});
-      }
+    else {
+
+        # default = REMOTE_USER
+        if ( $self->req->env->{REMOTE_USER} ) {
+            $self->stash( user => $self->req->env->{REMOTE_USER} );
+        }
     }
 }
 
