@@ -29,6 +29,7 @@ For the Mynch instance, you need the following Perl modules:
 * URI::Escape
 
 To run the tests, you also need:
+
 * Test::Class
 * Test::Mojo
 * Test::More
