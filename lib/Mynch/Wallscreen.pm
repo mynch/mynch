@@ -95,17 +95,24 @@ method hostgroup_summary {
     my $ls = Mynch::Livestatus->new( config => $self->stash->{config}->{ml} );
 
     my @columns = qw { name num_hosts_down num_hosts_unreach
+        num_services_hard_unknown num_services_unknown
         num_services_hard_crit num_services_crit
         num_services_hard_warn num_services_warn };
 
     my $query;
     $query .= "GET hostgroups\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
+    $query .= "Filter: num_services_unknown > 0\n";
+    $query .= "Filter: num_services_warn > 0\n";
     $query .= "Filter: num_services_crit > 0\n";
     $query .= "Filter: num_hosts_down > 0\n";
-    $query .= "Or: 2\n";
-    $query .= $self->hostgroup_filter( query_key => 'name',
-        query_operator => '=' );
+    $query .= "Filter: num_hosts_unreach > 0\n";
+    $query .= "Or: 5\n";
+    $query .= $self->hostgroup_filter(
+        query_key      => 'name',
+        query_operator => '='
+    );
+
     if ( exists $self->stash->{config}->{filters}->{'hide-hostgroups'} ) {
 
         foreach my $hidegroup (
