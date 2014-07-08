@@ -18,5 +18,5 @@ RUN [ "cpanm", "-v", "Method::Signatures" ]
 
 COPY . /srv/mynch
 
-EXPOSE 3000
-CMD [ "morbo", "/srv/mynch/script/mynch" ]
+EXPOSE 8080
+CMD [ "hypnotoad", "-f", "/srv/mynch/script/mynch" ]
