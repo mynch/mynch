@@ -233,6 +233,12 @@ method status_data {
     $query .= "GET servicesbyhostgroup\n";
     $query .= sprintf( "Columns: %s\n", join( " ", @columns ) );
     $query .= "Filter: state != 0\n";
+
+    $query .= "Filter: acknowledged = 0\n";
+    $query .= "Filter: notifications_enabled = 1\n";
+    $query .= "Filter: host_scheduled_downtime_depth = 0\n";
+    $query .= "Filter: scheduled_downtime_depth = 0\n";
+
     $query .= Mynch::Config->build_filter( $self->stash->{config},
         "service-noise" );
     $query .= $self->hostgroup_filter(
